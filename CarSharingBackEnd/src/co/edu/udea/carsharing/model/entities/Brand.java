@@ -10,7 +10,9 @@ public class Brand implements Serializable {
 	private static final long serialVersionUID = -8444184090726568260L;
 
 	private static final String BRAND = "brand";
+	private static final String ID = "_id";
 
+	private String id;
 	private String brand;
 
 	public Brand() {
@@ -25,6 +27,10 @@ public class Brand implements Serializable {
 	public static Brand entityFromDBObject(DBObject dbObject) {
 		Brand brand = new Brand((String) dbObject.get(BRAND));
 
+		if (dbObject.containsField(ID)) {
+			brand.setId(dbObject.get(ID).toString());
+		}
+
 		return (brand);
 	}
 
@@ -34,6 +40,14 @@ public class Brand implements Serializable {
 		basicDBObject.put(BRAND, this.getBrand());
 
 		return (basicDBObject);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getBrand() {
