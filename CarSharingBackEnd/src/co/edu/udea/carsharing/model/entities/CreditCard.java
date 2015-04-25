@@ -6,13 +6,13 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 /**
-*
-* @author Andersson Garc&iacute;a Sotelo
-* @author Miguel &Aacute;ngel Ossa Ruiz
-* @author Juan Pablo Nore&ntilde;a
-* @author Juan Camilo Chaverra
-* 
-*/
+ *
+ * @author Andersson Garc&iacute;a Sotelo
+ * @author Miguel &Aacute;ngel Ossa Ruiz
+ * @author Juan Pablo Nore&ntilde;a
+ * @author Juan Camilo Chaverra
+ * 
+ */
 public class CreditCard implements Serializable {
 
 	private static final long serialVersionUID = -7706807582765491066L;
@@ -43,8 +43,10 @@ public class CreditCard implements Serializable {
 
 	public DBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
-		basicDBObject.put(TYPE, this.getType());
-		basicDBObject.put(NUMBER, this.getNumber());
+		if (this.getType() != null && this.getNumber() != null) {
+			basicDBObject.put(TYPE, this.getType());
+			basicDBObject.put(NUMBER, this.getNumber());
+		}
 		return (basicDBObject);
 	}
 
