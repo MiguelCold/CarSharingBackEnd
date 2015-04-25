@@ -21,6 +21,28 @@ public class Car implements Serializable {
 	private String model;
 	private int capacity;
 
+	public Car() {
+		super();
+	}
+
+	public Car(String carriagePlate, Brand brand, String model, int capacity) {
+		super();
+		this.carriagePlate = carriagePlate;
+		this.brand = brand;
+		this.model = model;
+		this.capacity = capacity;
+	}
+
+	public Car(String color, String carriagePlate, Brand brand, String model,
+			int capacity) {
+		super();
+		this.color = color;
+		this.carriagePlate = carriagePlate;
+		this.brand = brand;
+		this.model = model;
+		this.capacity = capacity;
+	}
+
 	public static Car entityFromDBObject(DBObject dbObject) {
 		Car car = new Car();
 

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import co.edu.udea.carsharing.model.entities.util.State;
+
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -13,6 +15,7 @@ public class Event implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static String EVENTID = "_id";
 	private static String CREATEDATE = "createDate";
 	private static String EVENTDATE = "eventDate";
 	private static String AUTHOR = "author";
@@ -22,7 +25,9 @@ public class Event implements Serializable {
 	private static String TARGET = "target";
 	private static String PARTNERS = "partners";
 	private static String VALUE = "value";
+	private static String STATE = "state";
 
+	private String id;
 	private Date createDate;
 	private Date eventDate;
 	private User author;
@@ -32,13 +37,14 @@ public class Event implements Serializable {
 	private Site target;
 	private List<User> partners;
 	private double value;
+	private State state;
 
 	public Event() {
 		super();
 	}
 
 	public Event(Date createDate, Date eventDate, User author, Car car,
-			Site source, Site target, double value) {
+			Site source, Site target, double value, State state) {
 		this.createDate = createDate;
 		this.eventDate = eventDate;
 		this.author = author;
@@ -46,10 +52,15 @@ public class Event implements Serializable {
 		this.source = source;
 		this.target = target;
 		this.value = value;
+		this.state = state;
 	}
 
 	public static Event entityFromDBObject(DBObject dbObject) {
 		Event event = new Event();
+
+		if (dbObject.containsField(EVENTID)) {
+			event.setId((String) dbObject.get(EVENTID));
+		}
 
 		if (dbObject.containsField(CREATEDATE)) {
 			event.setCreateDate((Date) dbObject.get(CREATEDATE));
@@ -87,6 +98,7 @@ public class Event implements Serializable {
 		if (dbObject.containsField(CREATEDATE)) {
 			event.setCreateDate((Date) dbObject.get(CREATEDATE));
 		}
+
 		if (dbObject.containsField(PARTNERS)) {
 			BasicDBList basicDBbList = (BasicDBList) dbObject.get(PARTNERS);
 			event.setPartners(new ArrayList<User>());
@@ -94,6 +106,10 @@ public class Event implements Serializable {
 				event.getPartners().add(
 						User.entityFromDBObject((BasicDBObject) object));
 			}
+		}
+
+		if (dbObject.containsField(STATE)) {
+			event.setState((State) dbObject.get(STATE));
 		}
 		return (event);
 	}
@@ -149,7 +165,19 @@ public class Event implements Serializable {
 			basicDBObject.put(VALUE, this.getValue());
 		}
 
+		if (null != this.getState()) {
+			basicDBObject.put(STATE, this.getState());
+		}
+
 		return (basicDBObject);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Date getCreateDate() {
@@ -222,6 +250,14 @@ public class Event implements Serializable {
 
 	public void setValue(double value) {
 		this.value = value;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
 	}
 
 }
