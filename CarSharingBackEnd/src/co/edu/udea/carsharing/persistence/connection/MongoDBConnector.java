@@ -1,4 +1,4 @@
-package co.edu.udea.carsharing.persistence.conection;
+package co.edu.udea.carsharing.persistence.connection;
 
 import java.net.UnknownHostException;
 
@@ -18,13 +18,13 @@ public class MongoDBConnector {
 		super();
 	}
 
-	public static DBCollection connect() throws UnknownHostException {
+	public static DBCollection connect(String collectionName) throws UnknownHostException {
 		mongoClient = new MongoClient(SERVER, PORT);
 		@SuppressWarnings("deprecation")
 		DB db = mongoClient.getDB(DATA_BASE_NAME);
-		DBCollection collection = db.getCollection(COLLECTION_NAME);
+		DBCollection collection = db.getCollection(collectionName);
 		if (collection == null) {
-			collection = db.createCollection(COLLECTION_NAME, null);
+			collection = db.createCollection(collectionName, null);
 		}
 		return (collection);
 	}
