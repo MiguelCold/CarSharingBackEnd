@@ -18,7 +18,7 @@ public class User implements Serializable {
 	private static String EMAIL = "email";
 	private static String PASSWORD = "password";
 	private static String FACEBOOK_ID = "facebookId";
-	private static String CREDIT_CARDS = "creditCards";
+	private static String CARS = "cars";
 	private static String BIRTHDATE = "birthDate";
 
 	private String name;
@@ -26,8 +26,8 @@ public class User implements Serializable {
 	private String email;
 	private String password;
 	private String facebookId;
-	private List<CreditCard> creditCards;
 	private Date birthDate;
+	private List<Car> cars;
 
 	public User() {
 		super();
@@ -44,50 +44,33 @@ public class User implements Serializable {
 	}
 
 	public User(String name, String lastName, String email, String password,
-			String facebookId, List<CreditCard> creditcards, Date birthDate) {
+			String facebookId, Date birthDate, List<Car> cars) {
 		super();
 		this.name = name;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.facebookId = facebookId;
-		this.creditCards = creditcards;
 		this.birthDate = birthDate;
+		this.cars = cars;
 	}
 
 	public static User entityFromDBObject(DBObject dbObject) {
 		User user = new User();
 
-		if (dbObject.containsField(NAME)) {
-			user.setName((String) dbObject.get(NAME));
-		}
+		user.setName((String) dbObject.get(NAME));
+		user.setLastName((String) dbObject.get(LAST_NAME));
+		user.setEmail((String) dbObject.get(EMAIL));
+		user.setPassword((String) dbObject.get(PASSWORD));
+		user.setFacebookId((String) dbObject.get(FACEBOOK_ID));
+		user.setBirthDate((Date) dbObject.get(BIRTHDATE));
 
-		if (dbObject.containsField(LAST_NAME)) {
-			user.setLastName((String) dbObject.get(LAST_NAME));
-		}
-
-		if (dbObject.containsField(EMAIL)) {
-			user.setEmail((String) dbObject.get(EMAIL));
-		}
-
-		if (dbObject.containsField(PASSWORD)) {
-			user.setPassword((String) dbObject.get(PASSWORD));
-		}
-
-		if (dbObject.containsField(FACEBOOK_ID)) {
-			user.setFacebookId((String) dbObject.get(FACEBOOK_ID));
-		}
-
-		if (dbObject.containsField(BIRTHDATE)) {
-			user.setBirthDate((Date) dbObject.get(BIRTHDATE));
-		}
-
-		if (dbObject.containsField(CREDIT_CARDS)) {
-			BasicDBList basicDBbList = (BasicDBList) dbObject.get(CREDIT_CARDS);
-			user.setCreditCards(new ArrayList<CreditCard>());
+		if (dbObject.containsField(CARS)) {
+			BasicDBList basicDBbList = (BasicDBList) dbObject.get(CARS);
+			user.setCars(new ArrayList<Car>());
 			for (Object object : basicDBbList) {
-				user.getCreditCards().add(
-						CreditCard.entityFromDBObject((BasicDBObject) object));
+				user.getCars().add(
+						Car.entityFromDBObject((BasicDBObject) object));
 			}
 		}
 
@@ -97,38 +80,20 @@ public class User implements Serializable {
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		if (null != this.getBirthDate()) {
-			basicDBObject.put(BIRTHDATE, this.getBirthDate());
-		}
+		basicDBObject.put(BIRTHDATE, this.getBirthDate());
+		basicDBObject.put(EMAIL, this.getEmail());
+		basicDBObject.put(FACEBOOK_ID, this.getFacebookId());
+		basicDBObject.put(LAST_NAME, this.getLastName());
+		basicDBObject.put(PASSWORD, this.getPassword());
+		basicDBObject.put(NAME, this.getName());
 
-		if (null != this.getEmail()) {
-			basicDBObject.put(EMAIL, this.getEmail());
-		}
-
-		if (null != this.getFacebookId()) {
-			basicDBObject.put(FACEBOOK_ID, this.getFacebookId());
-		}
-
-		if (null != this.getLastName()) {
-			basicDBObject.put(LAST_NAME, this.getLastName());
-		}
-
-		if (null != this.getPassword()) {
-			basicDBObject.put(PASSWORD, this.getPassword());
-		}
-
-		if (null != this.getName()) {
-			basicDBObject.put(NAME, this.getName());
-		}
-
-		if (null != this.getCreditCards()) {
+		if (null != this.getCars()) {
 			BasicDBList basicDBList = new BasicDBList();
-
-			for (CreditCard creditCard : this.getCreditCards()) {
-				basicDBList.add(creditCard.entityToDBObject());
+			for (Car car : this.getCars()) {
+				basicDBList.add(car.entityToDBObject());
 			}
 
-			basicDBObject.put(CREDIT_CARDS, basicDBList);
+			basicDBObject.put(CARS, basicDBList);
 		}
 
 		return (basicDBObject);
@@ -174,14 +139,6 @@ public class User implements Serializable {
 		this.facebookId = facebookId;
 	}
 
-	public List<CreditCard> getCreditCards() {
-		return creditCards;
-	}
-
-	public void setCreditCards(List<CreditCard> creditCards) {
-		this.creditCards = creditCards;
-	}
-
 	public Date getBirthDate() {
 		return birthDate;
 	}
@@ -190,4 +147,11 @@ public class User implements Serializable {
 		this.birthDate = birthDate;
 	}
 
+	public List<Car> getCars() {
+		return cars;
+	}
+
+	public void setCars(List<Car> cars) {
+		this.cars = cars;
+	}
 }

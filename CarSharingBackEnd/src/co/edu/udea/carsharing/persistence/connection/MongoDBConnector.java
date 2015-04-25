@@ -11,7 +11,6 @@ public class MongoDBConnector {
 	public static String SERVER = "localhost";
 	public static int PORT = 27017;
 	public static String DATA_BASE_NAME = "car_sharingDB";
-	public static String COLLECTION_NAME = "Users";
 	private static MongoClient mongoClient;
 
 	private MongoDBConnector() {
