@@ -6,7 +6,7 @@ import co.edu.udea.carsharing.model.entities.User;
 
 public interface IUserDAO {
 
-	public User find();
+	public User find(String email);
 
 	public List<User> findAll();
 
