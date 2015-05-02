@@ -13,6 +13,7 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 8155172105840619244L;
 
+	private static String ID = "_id";
 	private static String NAME = "name";
 	private static String LAST_NAME = "lastName";
 	private static String EMAIL = "email";
@@ -21,6 +22,7 @@ public class User implements Serializable {
 	private static String CARS = "cars";
 	private static String BIRTHDATE = "birthDate";
 
+	private String id;
 	private String name;
 	private String lastName;
 	private String email;
@@ -55,15 +57,44 @@ public class User implements Serializable {
 		this.cars = cars;
 	}
 
+	public User(String name, String lastName, String email, String facebookId) {
+		super();
+		this.name = name;
+		this.lastName = lastName;
+		this.email = email;
+		this.facebookId = facebookId;
+	}
+
 	public static User entityFromDBObject(DBObject dbObject) {
 		User user = new User();
 
-		user.setName((String) dbObject.get(NAME));
-		user.setLastName((String) dbObject.get(LAST_NAME));
-		user.setEmail((String) dbObject.get(EMAIL));
-		user.setPassword((String) dbObject.get(PASSWORD));
-		user.setFacebookId((String) dbObject.get(FACEBOOK_ID));
-		user.setBirthDate((Date) dbObject.get(BIRTHDATE));
+		if (dbObject.containsField(ID)) {
+			user.setId(dbObject.get(ID).toString().trim());
+		}
+
+		if (dbObject.containsField(NAME)) {
+			user.setName(((String) dbObject.get(NAME)).trim());
+		}
+
+		if (dbObject.containsField(LAST_NAME)) {
+			user.setLastName(((String) dbObject.get(LAST_NAME)).trim());
+		}
+
+		if (dbObject.containsField(EMAIL)) {
+			user.setEmail(((String) dbObject.get(EMAIL)).trim());
+		}
+
+		if (dbObject.containsField(PASSWORD)) {
+			user.setPassword(((String) dbObject.get(PASSWORD)).trim());
+		}
+
+		if (dbObject.containsField(FACEBOOK_ID)) {
+			user.setFacebookId(((String) dbObject.get(FACEBOOK_ID)).trim());
+		}
+
+		if (dbObject.containsField(BIRTHDATE)) {
+			user.setBirthDate((Date) dbObject.get(BIRTHDATE));
+		}
 
 		if (dbObject.containsField(CARS)) {
 			BasicDBList basicDBbList = (BasicDBList) dbObject.get(CARS);
@@ -80,14 +111,36 @@ public class User implements Serializable {
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		basicDBObject.put(BIRTHDATE, this.getBirthDate());
-		basicDBObject.put(EMAIL, this.getEmail());
-		basicDBObject.put(FACEBOOK_ID, this.getFacebookId());
-		basicDBObject.put(LAST_NAME, this.getLastName());
-		basicDBObject.put(PASSWORD, this.getPassword());
-		basicDBObject.put(NAME, this.getName());
+		if (this.getId() != null && !this.getId().trim().equals("")) {
+			basicDBObject.put(ID, this.getId());
+		}
 
-		if (null != this.getCars()) {
+		if (null != this.getBirthDate()) {
+			basicDBObject.put(BIRTHDATE, this.getBirthDate());
+		}
+
+		if (null != this.getEmail() || !this.getEmail().trim().equals("")) {
+			basicDBObject.put(EMAIL, this.getEmail());
+		}
+
+		if (null != this.getFacebookId()
+				|| !this.getFacebookId().trim().equals("")) {
+			basicDBObject.put(FACEBOOK_ID, this.getFacebookId());
+		}
+
+		if (null != this.getLastName() || !this.getLastName().trim().equals("")) {
+			basicDBObject.put(LAST_NAME, this.getLastName());
+		}
+
+		if (null != this.getPassword() || !this.getPassword().trim().equals("")) {
+			basicDBObject.put(PASSWORD, this.getPassword());
+		}
+
+		if (null != this.getName() || !this.getName().trim().equals("")) {
+			basicDBObject.put(NAME, this.getName());
+		}
+
+		if (null != this.getCars() || !this.getCars().isEmpty()) {
 			BasicDBList basicDBList = new BasicDBList();
 			for (Car car : this.getCars()) {
 				basicDBList.add(car.entityToDBObject());
@@ -97,6 +150,14 @@ public class User implements Serializable {
 		}
 
 		return (basicDBObject);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {

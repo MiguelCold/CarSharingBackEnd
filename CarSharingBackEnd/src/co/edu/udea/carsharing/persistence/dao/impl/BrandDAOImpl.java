@@ -17,14 +17,14 @@ import com.mongodb.DBObject;
 
 public class BrandDAOImpl implements IBrandDAO {
 
-	private static String COLLECTION_NAME = "Brands";
-	private static String ID = "_id";
+	private static final String BRANDS_COLLECTION_NAME = "Brands";
+	private static final String ID = "_id";
 
 	private static IBrandDAO instance;
 	private DBCollection collection;
 
 	private BrandDAOImpl() throws UnknownHostException {
-		this.collection = MongoDBConnector.connect(COLLECTION_NAME);
+		this.collection = MongoDBConnector.connect(BRANDS_COLLECTION_NAME);
 	}
 
 	public static synchronized IBrandDAO getInstance()
@@ -52,10 +52,10 @@ public class BrandDAOImpl implements IBrandDAO {
 	public Brand insert(Brand brand) {
 		BasicDBObject dbo = brand.entityToDBObject();
 		this.collection.insert(dbo);
-		
+
 		ObjectId id = (ObjectId) dbo.get(ID);
 		DBObject dbObject = collection.findOne(id);
-		
+
 		return ((null == dbObject) ? null : Brand.entityFromDBObject(dbObject));
 	}
 

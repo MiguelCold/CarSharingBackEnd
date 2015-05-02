@@ -2,18 +2,17 @@ package co.edu.udea.carsharing.persistence.dao;
 
 import java.util.List;
 
+import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.User;
 
 public interface IUserDAO {
 
-	public User find(String email);
+	public User findByEmail(String email);
 
-	public List<User> findAll();
+	public User insert(User user);
 
-	public boolean insert(User user);
+	public User addCar(Car car);
 
-	public User update(User user);
-
-	public boolean delete(User user);
+	public List<Car> getCarsByUser(String email);
 
 }

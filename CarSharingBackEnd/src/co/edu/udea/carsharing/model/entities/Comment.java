@@ -8,7 +8,7 @@ import com.mongodb.DBObject;
 
 public class Comment implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3823050722730537024L;
 
 	private static String AUTHOR = "author";
 	private static String MESSAGE = "message";
@@ -37,7 +37,7 @@ public class Comment implements Serializable {
 		}
 
 		if (dbObject.containsField(MESSAGE)) {
-			comment.setMessage((String) dbObject.get(MESSAGE));
+			comment.setMessage(((String) dbObject.get(MESSAGE)).trim());
 		}
 
 		if (dbObject.containsField(CREATEDATE)) {
@@ -54,7 +54,7 @@ public class Comment implements Serializable {
 			basicDBObject.put(AUTHOR, this.getAuthor());
 		}
 
-		if (null != this.getMessage()) {
+		if (null != this.getMessage() && !this.getMessage().trim().equals("")) {
 			basicDBObject.put(MESSAGE, this.getMessage());
 		}
 

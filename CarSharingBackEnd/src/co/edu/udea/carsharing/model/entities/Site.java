@@ -28,12 +28,12 @@ public class Site implements Serializable {
 		Site site = new Site();
 
 		if (dbObject.containsField(GEOGRAPHICALLOCATION)) {
-			site.setGeographicalLocation((String) dbObject
-					.get(GEOGRAPHICALLOCATION));
+			site.setGeographicalLocation(((String) dbObject
+					.get(GEOGRAPHICALLOCATION)).trim());
 		}
 
 		if (dbObject.containsField(DESCRIPTION)) {
-			site.setDescription((String) dbObject.get(DESCRIPTION));
+			site.setDescription(((String) dbObject.get(DESCRIPTION)).trim());
 		}
 
 		return (site);
@@ -42,12 +42,14 @@ public class Site implements Serializable {
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		if (null != this.getGeographicalLocation()) {
+		if (null != this.getGeographicalLocation()
+				&& !this.getGeographicalLocation().trim().equals("")) {
 			basicDBObject.put(GEOGRAPHICALLOCATION,
 					this.getGeographicalLocation());
 		}
 
-		if (null != this.getDescription()) {
+		if (null != this.getDescription()
+				&& !this.getDescription().trim().equals("")) {
 			basicDBObject.put(DESCRIPTION, this.getDescription());
 		}
 

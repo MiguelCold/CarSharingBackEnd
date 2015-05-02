@@ -46,11 +46,27 @@ public class Car implements Serializable {
 	public static Car entityFromDBObject(DBObject dbObject) {
 		Car car = new Car();
 
-		car.setColor((String) dbObject.get(COLOR));
-		car.setCarriagePlate((String) dbObject.get(CARRIAGE_PLATE));
-		car.setBrand(Brand.entityFromDBObject((DBObject) dbObject.get(BRAND)));
-		car.setModel((String) dbObject.get(MODEL));
-		car.setCapacity(Integer.parseInt((String) dbObject.get(CAPACITY)));
+		if (dbObject.containsField(COLOR)) {
+			car.setColor(((String) dbObject.get(COLOR)).trim());
+		}
+
+		if (dbObject.containsField(CARRIAGE_PLATE)) {
+			car.setCarriagePlate(((String) dbObject.get(CARRIAGE_PLATE)).trim());
+		}
+
+		if (dbObject.containsField(BRAND)) {
+			car.setBrand(Brand.entityFromDBObject((DBObject) dbObject
+					.get(BRAND)));
+		}
+
+		if (dbObject.containsField(MODEL)) {
+			car.setModel(((String) dbObject.get(MODEL)).trim());
+		}
+
+		if (dbObject.containsField(CAPACITY)) {
+			car.setCapacity(Integer.parseInt(dbObject.get(CAPACITY).toString()
+					.trim()));
+		}
 
 		return (car);
 	}
@@ -58,10 +74,23 @@ public class Car implements Serializable {
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		basicDBObject.put(COLOR, this.getColor());
-		basicDBObject.put(CARRIAGE_PLATE, this.getCarriagePlate());
-		basicDBObject.put(BRAND, this.getModel());
-		basicDBObject.put(MODEL, this.getModel());
+		if (null != this.getColor() && !this.getColor().trim().equals("")) {
+			basicDBObject.put(COLOR, this.getColor().trim());
+		}
+
+		if (null != this.getCarriagePlate()
+				&& !this.getCarriagePlate().trim().equals("")) {
+			basicDBObject.put(CARRIAGE_PLATE, this.getCarriagePlate().trim());
+		}
+
+		if (null != this.getBrand()) {
+			basicDBObject.put(BRAND, this.getBrand().entityToDBObject());
+		}
+
+		if (null != this.getModel() && !this.getModel().trim().equals("")) {
+			basicDBObject.put(MODEL, this.getModel().trim());
+		}
+
 		basicDBObject.put(CAPACITY, this.getCapacity());
 
 		return (basicDBObject);

@@ -25,10 +25,14 @@ public class Brand implements Serializable {
 	}
 
 	public static Brand entityFromDBObject(DBObject dbObject) {
-		Brand brand = new Brand((String) dbObject.get(BRAND));
+		Brand brand = new Brand();
+
+		if (dbObject.containsField(BRAND)) {
+			brand.setBrand(((String) dbObject.get(BRAND)).trim());
+		}
 
 		if (dbObject.containsField(ID)) {
-			brand.setId(dbObject.get(ID).toString());
+			brand.setId(dbObject.get(ID).toString().trim());
 		}
 
 		return (brand);
@@ -37,7 +41,13 @@ public class Brand implements Serializable {
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		basicDBObject.put(BRAND, this.getBrand());
+		if (null != this.getBrand() && !this.getBrand().trim().equals("")) {
+			basicDBObject.put(BRAND, this.getBrand().trim());
+		}
+
+		if (null != this.getId() && !this.getId().trim().equals("")) {
+			basicDBObject.put(ID, this.getId().trim());
+		}
 
 		return (basicDBObject);
 	}

@@ -6,17 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.WriteResult;
+import org.bson.types.ObjectId;
 
+import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IEventDAO;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 
 public class EventDAOImpl implements IEventDAO {
 
@@ -24,7 +27,7 @@ public class EventDAOImpl implements IEventDAO {
 	private final DBCollection collection;
 	public static final Map<String, String> INEQUALITIES = new HashMap<>();
 
-	private static final String EVENTID = "_id";
+	private static final String ID = "_id";
 
 	static {
 		INEQUALITIES.put("<", "$lt");
@@ -51,7 +54,7 @@ public class EventDAOImpl implements IEventDAO {
 	public Event find(String eventId) {
 		if (eventId != null && !eventId.equals("")) {
 			BasicDBObject basicDBObject = new BasicDBObject();
-			basicDBObject.put(EVENTID, eventId);
+			basicDBObject.put(ID, eventId);
 			DBCursor dbCursor = this.collection.find(basicDBObject);
 
 			return (Event.entityFromDBObject(dbCursor.one()));
@@ -77,12 +80,18 @@ public class EventDAOImpl implements IEventDAO {
 	public Event insert(Event event) {
 		if (event != null) {
 			BasicDBObject basicDBObject = event.entityToDBObject();
-			WriteResult wr = this.collection.insert(basicDBObject);
-			// System.out.print(wr.toString());
+			this.collection.insert(basicDBObject);
+
+			ObjectId id = (ObjectId) basicDBObject.get(ID);
+			DBObject dbObject = collection.findOne(id);
+
+			return ((null == dbObject) ? null : Event
+					.entityFromDBObject(dbObject));
 		} else {
 			System.out.println("El parámetro event no puede ser Nulo");
+
+			return (null);
 		}
-		return (event);
 
 	}
 
@@ -127,7 +136,7 @@ public class EventDAOImpl implements IEventDAO {
 	@Override
 	public Event update(Event event) {
 		if (event != null) {
-			BasicDBObject searchingBasicDBObject = new BasicDBObject(EVENTID,
+			BasicDBObject searchingBasicDBObject = new BasicDBObject(ID,
 					event.getId());
 			BasicDBObject updatingBasicDBObject = new BasicDBObject("$set",
 					event.entityToDBObject());
@@ -164,7 +173,7 @@ public class EventDAOImpl implements IEventDAO {
 	@Override
 	public List<Event> cancel(String eventId) {
 		if (eventId != null && !eventId.equals("")) {
-			WriteResult wr = this.collection.remove(new BasicDBObject(EVENTID,
+			WriteResult wr = this.collection.remove(new BasicDBObject(ID,
 					eventId));
 			return (this.findAll());
 		} else {
