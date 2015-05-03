@@ -23,10 +23,12 @@ import com.mongodb.WriteResult;
 public class EventDAOImpl implements IEventDAO {
 
 	private static IEventDAO instance;
-	private final DBCollection collection;
-	public static final Map<String, String> INEQUALITIES = new HashMap<>();
 
+	private final DBCollection collection;
+
+	private static final String EVENTS_COLLECTION_NAME = "Events";
 	private static final String ID = "_id";
+	public static final Map<String, String> INEQUALITIES = new HashMap<>();
 
 	static {
 		INEQUALITIES.put("<", "$lt");
@@ -37,7 +39,7 @@ public class EventDAOImpl implements IEventDAO {
 	}
 
 	private EventDAOImpl() throws UnknownHostException {
-		this.collection = MongoDBConnector.connect("Events");
+		this.collection = MongoDBConnector.connect(EVENTS_COLLECTION_NAME);
 	}
 
 	public static synchronized IEventDAO getInstance()
@@ -52,14 +54,20 @@ public class EventDAOImpl implements IEventDAO {
 	@Override
 	public Event find(String eventId) {
 		if (eventId != null && !eventId.equals("")) {
-			BasicDBObject basicDBObject = new BasicDBObject();
-			basicDBObject.put(ID, eventId);
-			DBCursor dbCursor = this.collection.find(basicDBObject);
+			DBObject dbo;
+			try {
+				dbo = new BasicDBObject(ID, new ObjectId(eventId));
+			} catch (Exception e) {
 
-			return (Event.entityFromDBObject(dbCursor.one()));
+				return (null);
+			}
+			DBObject dbObject = this.collection.findOne(dbo);
+
+			return (Event.entityFromDBObject(dbObject));
 		} else {
 			System.out.println("El parámetro eventId no puede ser Nulo");
-			return null;
+
+			return (null);
 		}
 	}
 
@@ -96,7 +104,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event insertComment(Comment newComment, String eventId) {
-		if (eventId != null && !eventId.equals("") && newComment != null) {
+		if (eventId != null && !eventId.trim().equals("") && newComment != null) {
 			Event event = this.find(eventId);
 			if (event != null) {
 				event.getComments().add(newComment);
@@ -105,6 +113,7 @@ public class EventDAOImpl implements IEventDAO {
 				System.out.println("No se ha encontrado el evento con id: "
 						+ eventId);
 			}
+
 			return event;
 		} else {
 			System.out.println("Los parámetros eventId y newComment deben "
@@ -115,7 +124,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event join(User newPartner, String eventId) {
-		if (eventId != null && !eventId.equals("") && newPartner != null) {
+		if (eventId != null && !eventId.trim().equals("") && newPartner != null) {
 			Event event = this.find(eventId);
 			if (event != null) {
 				event.getPartners().add(newPartner);
@@ -124,11 +133,13 @@ public class EventDAOImpl implements IEventDAO {
 				System.out.println("No se ha encontrado el evento con id: "
 						+ eventId);
 			}
-			return event;
+
+			return (event);
 		} else {
-			System.out.println("Los parÃ¡metros eventId y newPartner deben "
+			System.out.println("Los parámetros eventId y newPartner deben "
 					+ "ser diferentes de Nulo");
-			return null;
+
+			return (null);
 		}
 	}
 
@@ -136,7 +147,7 @@ public class EventDAOImpl implements IEventDAO {
 	public Event update(Event event) {
 		if (event != null) {
 			BasicDBObject searchingBasicDBObject = new BasicDBObject(ID,
-					event.getId());
+					new ObjectId(event.getId()));
 			BasicDBObject updatingBasicDBObject = new BasicDBObject("$set",
 					event.entityToDBObject());
 
@@ -146,7 +157,8 @@ public class EventDAOImpl implements IEventDAO {
 			return ((wr.getN() != 0) ? event : null);
 		} else {
 			System.out.println("El parámetro event no puede ser Nulo");
-			return null;
+
+			return (null);
 		}
 	}
 

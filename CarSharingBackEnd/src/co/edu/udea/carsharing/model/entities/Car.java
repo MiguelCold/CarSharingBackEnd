@@ -44,28 +44,34 @@ public class Car implements Serializable {
 	}
 
 	public static Car entityFromDBObject(DBObject dbObject) {
-		Car car = new Car();
+		Car car = null;
 
-		if (dbObject.containsField(COLOR)) {
-			car.setColor(((String) dbObject.get(COLOR)).trim());
-		}
+		if (dbObject != null) {
+			car = new Car();
 
-		if (dbObject.containsField(CARRIAGE_PLATE)) {
-			car.setCarriagePlate(((String) dbObject.get(CARRIAGE_PLATE)).trim());
-		}
+			if (dbObject.containsField(COLOR)) {
+				car.setColor(((String) dbObject.get(COLOR)).trim());
+			}
 
-		if (dbObject.containsField(BRAND)) {
-			car.setBrand(Brand.entityFromDBObject((DBObject) dbObject
-					.get(BRAND)));
-		}
+			if (dbObject.containsField(CARRIAGE_PLATE)) {
+				car.setCarriagePlate(((String) dbObject.get(CARRIAGE_PLATE))
+						.trim());
+			}
 
-		if (dbObject.containsField(MODEL)) {
-			car.setModel(((String) dbObject.get(MODEL)).trim());
-		}
+			if (dbObject.containsField(BRAND)) {
+				car.setBrand(Brand.entityFromDBObject((DBObject) dbObject
+						.get(BRAND)));
+			}
 
-		if (dbObject.containsField(CAPACITY)) {
-			car.setCapacity(Integer.parseInt(dbObject.get(CAPACITY).toString()
-					.trim()));
+			if (dbObject.containsField(MODEL)) {
+				car.setModel(((String) dbObject.get(MODEL)).trim());
+			}
+
+			if (dbObject.containsField(CAPACITY)) {
+				car.setCapacity(Integer.parseInt(dbObject.get(CAPACITY)
+						.toString().trim()));
+			}
+
 		}
 
 		return (car);

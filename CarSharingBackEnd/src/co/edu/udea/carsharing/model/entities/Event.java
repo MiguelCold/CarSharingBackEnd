@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -54,64 +56,68 @@ public class Event implements Serializable {
 	}
 
 	public static Event entityFromDBObject(DBObject dbObject) {
-		Event event = new Event();
+		Event event = null;
+		if (dbObject != null) {
+			event = new Event();
 
-		if (dbObject.containsField(ID)) {
-			event.setId(dbObject.get(ID).toString().trim());
-		}
-
-		if (dbObject.containsField(CREATEDATE)) {
-			event.setCreateDate((Date) dbObject.get(CREATEDATE));
-		}
-
-		if (dbObject.containsField(EVENTDATE)) {
-			event.setEventDate((Date) dbObject.get(EVENTDATE));
-		}
-
-		if (dbObject.containsField(AUTHOR)) {
-			event.setAuthor(User.entityFromDBObject((DBObject) dbObject
-					.get(AUTHOR)));
-		}
-
-		if (dbObject.containsField(CAR)) {
-			event.setCar(Car.entityFromDBObject((DBObject) dbObject.get(CAR)));
-		}
-
-		if (dbObject.containsField(COMMENTS)) {
-			BasicDBList basicDBbList = (BasicDBList) dbObject.get(COMMENTS);
-			event.setComments(new ArrayList<Comment>());
-			for (Object object : basicDBbList) {
-				event.getComments().add(
-						Comment.entityFromDBObject((BasicDBObject) object));
+			if (dbObject.containsField(ID)) {
+				event.setId(dbObject.get(ID).toString().trim());
 			}
-		}
 
-		if (dbObject.containsField(SOURCE)) {
-			event.setSource(Site.entityFromDBObject((DBObject) dbObject
-					.get(SOURCE)));
-		}
-
-		if (dbObject.containsField(TARGET)) {
-			event.setSource(Site.entityFromDBObject((DBObject) dbObject
-					.get(TARGET)));
-		}
-
-		if (dbObject.containsField(PARTNERS)) {
-			BasicDBList basicDBbList = (BasicDBList) dbObject.get(PARTNERS);
-			event.setPartners(new ArrayList<User>());
-			for (Object object : basicDBbList) {
-				event.getPartners().add(
-						User.entityFromDBObject((BasicDBObject) object));
+			if (dbObject.containsField(CREATEDATE)) {
+				event.setCreateDate((Date) dbObject.get(CREATEDATE));
 			}
-		}
 
-		if (dbObject.containsField(VALUE)) {
-			event.setValue(Double.parseDouble(dbObject.get(VALUE).toString()
-					.trim()));
-		}
+			if (dbObject.containsField(EVENTDATE)) {
+				event.setEventDate((Date) dbObject.get(EVENTDATE));
+			}
 
-		if (dbObject.containsField(STATE)) {
-			event.setState(((String) dbObject.get(STATE)).trim());
+			if (dbObject.containsField(AUTHOR)) {
+				event.setAuthor(User.entityFromDBObject((DBObject) dbObject
+						.get(AUTHOR)));
+			}
+
+			if (dbObject.containsField(CAR)) {
+				event.setCar(Car.entityFromDBObject((DBObject) dbObject
+						.get(CAR)));
+			}
+
+			if (dbObject.containsField(COMMENTS)) {
+				BasicDBList basicDBbList = (BasicDBList) dbObject.get(COMMENTS);
+				event.setComments(new ArrayList<Comment>());
+				for (Object object : basicDBbList) {
+					event.getComments().add(
+							Comment.entityFromDBObject((BasicDBObject) object));
+				}
+			}
+
+			if (dbObject.containsField(SOURCE)) {
+				event.setSource(Site.entityFromDBObject((DBObject) dbObject
+						.get(SOURCE)));
+			}
+
+			if (dbObject.containsField(TARGET)) {
+				event.setTarget(Site.entityFromDBObject((DBObject) dbObject
+						.get(TARGET)));
+			}
+
+			if (dbObject.containsField(PARTNERS)) {
+				BasicDBList basicDBbList = (BasicDBList) dbObject.get(PARTNERS);
+				event.setPartners(new ArrayList<User>());
+				for (Object object : basicDBbList) {
+					event.getPartners().add(
+							User.entityFromDBObject((BasicDBObject) object));
+				}
+			}
+
+			if (dbObject.containsField(VALUE)) {
+				event.setValue(Double.parseDouble(dbObject.get(VALUE)
+						.toString().trim()));
+			}
+
+			if (dbObject.containsField(STATE)) {
+				event.setState(((String) dbObject.get(STATE)).trim());
+			}
 		}
 
 		return (event);
@@ -121,7 +127,7 @@ public class Event implements Serializable {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
 		if (null != this.getId() && !this.getId().trim().equals("")) {
-			basicDBObject.put(ID, this.getId());
+			basicDBObject.put(ID, new ObjectId(this.getId().trim()));
 		}
 
 		if (null != this.getCreateDate()) {
@@ -140,7 +146,7 @@ public class Event implements Serializable {
 			basicDBObject.put(CAR, this.getCar().entityToDBObject());
 		}
 
-		if (null != this.getComments()) {
+		if (null != this.getComments() && !this.getComments().isEmpty()) {
 			BasicDBList basicDBList = new BasicDBList();
 
 			for (Comment comment : this.getComments()) {
@@ -158,7 +164,7 @@ public class Event implements Serializable {
 			basicDBObject.put(TARGET, this.getTarget().entityToDBObject());
 		}
 
-		if (null != this.getPartners()) {
+		if (null != this.getPartners() && !this.getPartners().isEmpty()) {
 			BasicDBList basicDBList = new BasicDBList();
 
 			for (User user : this.getPartners()) {

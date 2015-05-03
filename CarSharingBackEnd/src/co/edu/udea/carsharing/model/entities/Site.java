@@ -25,15 +25,19 @@ public class Site implements Serializable {
 	}
 
 	public static Site entityFromDBObject(DBObject dbObject) {
-		Site site = new Site();
+		Site site = null;
 
-		if (dbObject.containsField(GEOGRAPHICALLOCATION)) {
-			site.setGeographicalLocation(((String) dbObject
-					.get(GEOGRAPHICALLOCATION)).trim());
-		}
+		if (dbObject != null) {
+			site = new Site();
 
-		if (dbObject.containsField(DESCRIPTION)) {
-			site.setDescription(((String) dbObject.get(DESCRIPTION)).trim());
+			if (dbObject.containsField(GEOGRAPHICALLOCATION)) {
+				site.setGeographicalLocation(((String) dbObject
+						.get(GEOGRAPHICALLOCATION)).trim());
+			}
+
+			if (dbObject.containsField(DESCRIPTION)) {
+				site.setDescription(((String) dbObject.get(DESCRIPTION)).trim());
+			}
 		}
 
 		return (site);

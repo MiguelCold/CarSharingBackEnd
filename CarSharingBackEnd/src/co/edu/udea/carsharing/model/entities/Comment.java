@@ -30,18 +30,23 @@ public class Comment implements Serializable {
 	}
 
 	public static Comment entityFromDBObject(DBObject dbObject) {
-		Comment comment = new Comment();
+		Comment comment = null;
 
-		if (dbObject.containsField(AUTHOR)) {
-			comment.setAuthor((User) dbObject.get(AUTHOR));
-		}
+		if (dbObject != null) {
+			comment = new Comment();
 
-		if (dbObject.containsField(MESSAGE)) {
-			comment.setMessage(((String) dbObject.get(MESSAGE)).trim());
-		}
+			if (dbObject.containsField(AUTHOR)) {
+				comment.setAuthor(User.entityFromDBObject((DBObject) dbObject
+						.get(AUTHOR)));
+			}
 
-		if (dbObject.containsField(CREATEDATE)) {
-			comment.setCreateDate((Date) dbObject.get(CREATEDATE));
+			if (dbObject.containsField(MESSAGE)) {
+				comment.setMessage(((String) dbObject.get(MESSAGE)).trim());
+			}
+
+			if (dbObject.containsField(CREATEDATE)) {
+				comment.setCreateDate((Date) dbObject.get(CREATEDATE));
+			}
 		}
 
 		return (comment);
@@ -51,7 +56,7 @@ public class Comment implements Serializable {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
 		if (null != this.getAuthor()) {
-			basicDBObject.put(AUTHOR, this.getAuthor());
+			basicDBObject.put(AUTHOR, this.getAuthor().entityToDBObject());
 		}
 
 		if (null != this.getMessage() && !this.getMessage().trim().equals("")) {

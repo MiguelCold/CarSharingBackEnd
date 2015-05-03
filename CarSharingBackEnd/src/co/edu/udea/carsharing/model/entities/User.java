@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -33,6 +35,13 @@ public class User implements Serializable {
 
 	public User() {
 		super();
+	}
+
+	public User(String name, String lastName, String email) {
+		super();
+		this.name = name;
+		this.lastName = lastName;
+		this.email = email;
 	}
 
 	public User(String name, String lastName, String email, String password,
@@ -66,42 +75,46 @@ public class User implements Serializable {
 	}
 
 	public static User entityFromDBObject(DBObject dbObject) {
-		User user = new User();
+		User user = null;
 
-		if (dbObject.containsField(ID)) {
-			user.setId(dbObject.get(ID).toString().trim());
-		}
+		if (dbObject != null) {
+			user = new User();
 
-		if (dbObject.containsField(NAME)) {
-			user.setName(((String) dbObject.get(NAME)).trim());
-		}
+			if (dbObject.containsField(ID)) {
+				user.setId(dbObject.get(ID).toString().trim());
+			}
 
-		if (dbObject.containsField(LAST_NAME)) {
-			user.setLastName(((String) dbObject.get(LAST_NAME)).trim());
-		}
+			if (dbObject.containsField(NAME)) {
+				user.setName(((String) dbObject.get(NAME)).trim());
+			}
 
-		if (dbObject.containsField(EMAIL)) {
-			user.setEmail(((String) dbObject.get(EMAIL)).trim());
-		}
+			if (dbObject.containsField(LAST_NAME)) {
+				user.setLastName(((String) dbObject.get(LAST_NAME)).trim());
+			}
 
-		if (dbObject.containsField(PASSWORD)) {
-			user.setPassword(((String) dbObject.get(PASSWORD)).trim());
-		}
+			if (dbObject.containsField(EMAIL)) {
+				user.setEmail(((String) dbObject.get(EMAIL)).trim());
+			}
 
-		if (dbObject.containsField(FACEBOOK_ID)) {
-			user.setFacebookId(((String) dbObject.get(FACEBOOK_ID)).trim());
-		}
+			if (dbObject.containsField(PASSWORD)) {
+				user.setPassword(((String) dbObject.get(PASSWORD)).trim());
+			}
 
-		if (dbObject.containsField(BIRTHDATE)) {
-			user.setBirthDate((Date) dbObject.get(BIRTHDATE));
-		}
+			if (dbObject.containsField(FACEBOOK_ID)) {
+				user.setFacebookId(((String) dbObject.get(FACEBOOK_ID)).trim());
+			}
 
-		if (dbObject.containsField(CARS)) {
-			BasicDBList basicDBbList = (BasicDBList) dbObject.get(CARS);
-			user.setCars(new ArrayList<Car>());
-			for (Object object : basicDBbList) {
-				user.getCars().add(
-						Car.entityFromDBObject((BasicDBObject) object));
+			if (dbObject.containsField(BIRTHDATE)) {
+				user.setBirthDate((Date) dbObject.get(BIRTHDATE));
+			}
+
+			if (dbObject.containsField(CARS)) {
+				BasicDBList basicDBbList = (BasicDBList) dbObject.get(CARS);
+				user.setCars(new ArrayList<Car>());
+				for (Object object : basicDBbList) {
+					user.getCars().add(
+							Car.entityFromDBObject((BasicDBObject) object));
+				}
 			}
 		}
 
@@ -112,35 +125,35 @@ public class User implements Serializable {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
 		if (this.getId() != null && !this.getId().trim().equals("")) {
-			basicDBObject.put(ID, this.getId());
+			basicDBObject.put(ID, new ObjectId(this.getId().trim()));
 		}
 
 		if (null != this.getBirthDate()) {
 			basicDBObject.put(BIRTHDATE, this.getBirthDate());
 		}
 
-		if (null != this.getEmail() || !this.getEmail().trim().equals("")) {
+		if (null != this.getEmail() && !this.getEmail().trim().equals("")) {
 			basicDBObject.put(EMAIL, this.getEmail());
 		}
 
 		if (null != this.getFacebookId()
-				|| !this.getFacebookId().trim().equals("")) {
+				&& !this.getFacebookId().trim().equals("")) {
 			basicDBObject.put(FACEBOOK_ID, this.getFacebookId());
 		}
 
-		if (null != this.getLastName() || !this.getLastName().trim().equals("")) {
+		if (null != this.getLastName() && !this.getLastName().trim().equals("")) {
 			basicDBObject.put(LAST_NAME, this.getLastName());
 		}
 
-		if (null != this.getPassword() || !this.getPassword().trim().equals("")) {
+		if (null != this.getPassword() && !this.getPassword().trim().equals("")) {
 			basicDBObject.put(PASSWORD, this.getPassword());
 		}
 
-		if (null != this.getName() || !this.getName().trim().equals("")) {
+		if (null != this.getName() && !this.getName().trim().equals("")) {
 			basicDBObject.put(NAME, this.getName());
 		}
 
-		if (null != this.getCars() || !this.getCars().isEmpty()) {
+		if (null != this.getCars() && !this.getCars().isEmpty()) {
 			BasicDBList basicDBList = new BasicDBList();
 			for (Car car : this.getCars()) {
 				basicDBList.add(car.entityToDBObject());
