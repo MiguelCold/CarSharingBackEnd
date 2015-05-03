@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
@@ -59,7 +58,7 @@ public class EventDAOImpl implements IEventDAO {
 
 			return (Event.entityFromDBObject(dbCursor.one()));
 		} else {
-			System.out.println("El parámetro eventId no puede ser Nulo");
+			System.out.println("El par�metro eventId no puede ser Nulo");
 			return null;
 		}
 	}
@@ -80,15 +79,15 @@ public class EventDAOImpl implements IEventDAO {
 	public Event insert(Event event) {
 		if (event != null) {
 			BasicDBObject basicDBObject = event.entityToDBObject();
-			this.collection.insert(basicDBObject);
+			WriteResult wr = this.collection.insert(basicDBObject);
 
 			ObjectId id = (ObjectId) basicDBObject.get(ID);
 			DBObject dbObject = collection.findOne(id);
 
-			return ((null == dbObject) ? null : Event
-					.entityFromDBObject(dbObject));
+			return ((null != dbObject && wr.getN() == 0) ? Event
+					.entityFromDBObject(dbObject) : null);
 		} else {
-			System.out.println("El parámetro event no puede ser Nulo");
+			System.out.println("El par�metro event no puede ser Nulo");
 
 			return (null);
 		}
@@ -108,7 +107,7 @@ public class EventDAOImpl implements IEventDAO {
 			}
 			return event;
 		} else {
-			System.out.println("Los parámetros eventId y newComment deben "
+			System.out.println("Los par�metros eventId y newComment deben "
 					+ "ser diferentes de Nulo");
 			return null;
 		}
@@ -146,7 +145,7 @@ public class EventDAOImpl implements IEventDAO {
 
 			return ((wr.getN() != 0) ? event : null);
 		} else {
-			System.out.println("El parámetro event no puede ser Nulo");
+			System.out.println("El par�metro event no puede ser Nulo");
 			return null;
 		}
 	}
@@ -173,8 +172,8 @@ public class EventDAOImpl implements IEventDAO {
 	@Override
 	public List<Event> cancel(String eventId) {
 		if (eventId != null && !eventId.equals("")) {
-			WriteResult wr = this.collection.remove(new BasicDBObject(ID,
-					eventId));
+			this.collection.remove(new BasicDBObject(ID, eventId));
+
 			return (this.findAll());
 		} else {
 			System.out.println("El parámetro eventId no puede ser Nulo");

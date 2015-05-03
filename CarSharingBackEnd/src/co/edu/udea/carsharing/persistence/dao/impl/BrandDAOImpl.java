@@ -14,6 +14,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 
 public class BrandDAOImpl implements IBrandDAO {
 
@@ -50,13 +51,20 @@ public class BrandDAOImpl implements IBrandDAO {
 
 	@Override
 	public Brand insert(Brand brand) {
-		BasicDBObject dbo = brand.entityToDBObject();
-		this.collection.insert(dbo);
+		if (brand != null) {
+			BasicDBObject dbo = brand.entityToDBObject();
+			WriteResult wr = this.collection.insert(dbo);
 
-		ObjectId id = (ObjectId) dbo.get(ID);
-		DBObject dbObject = collection.findOne(id);
+			ObjectId id = (ObjectId) dbo.get(ID);
+			DBObject dbObject = collection.findOne(id);
 
-		return ((null == dbObject) ? null : Brand.entityFromDBObject(dbObject));
+			return ((null == dbObject && wr.getN() == 0) ? null : Brand
+					.entityFromDBObject(dbObject));
+		} else {
+			System.out.println("El parámetro no puede ser nulo.");
+
+			return (null);
+		}
 	}
 
 }

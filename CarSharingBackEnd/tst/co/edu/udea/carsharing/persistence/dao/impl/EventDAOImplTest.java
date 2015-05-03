@@ -43,7 +43,7 @@ public class EventDAOImplTest {
 		Car car = new Car("Blanco", "hil456", brand, "2014", 4);
 		cars.add(car);
 		
-		User author = new User("Miguel √Ångel", "Ossa Ruiz",
+		User author = new User("Migue ¡ngel", "Ossa Ruiz",
 				"miguelcold8@gmail.com", null);
 		Site source = new Site("location", "U de A");
 		Site target = new Site("location", "U de A");
