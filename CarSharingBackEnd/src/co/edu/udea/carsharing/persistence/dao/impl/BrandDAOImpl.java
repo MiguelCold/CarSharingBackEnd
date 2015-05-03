@@ -34,7 +34,7 @@ public class BrandDAOImpl implements IBrandDAO {
 			instance = new BrandDAOImpl();
 		}
 
-		return (instance);
+		return instance;
 	}
 
 	@Override
@@ -58,12 +58,12 @@ public class BrandDAOImpl implements IBrandDAO {
 			ObjectId id = (ObjectId) dbo.get(ID);
 			DBObject dbObject = collection.findOne(id);
 
-			return ((null == dbObject && wr.getN() == 0) ? null : Brand
-					.entityFromDBObject(dbObject));
+			return (null == dbObject && wr.getN() == 0) ? null : Brand
+					.entityFromDBObject(dbObject);
 		} else {
 			System.out.println("El parámetro no puede ser nulo.");
 
-			return (null);
+			return null;
 		}
 	}
 

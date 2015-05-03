@@ -20,18 +20,10 @@ import co.edu.udea.carsharing.model.entities.util.StateEnum;
 public class EventDAOImplTest {
 
 	@Test
-	public void testFindAll() {
+	public void testFindAll() throws UnknownHostException {
 		List<Event> events = new ArrayList<Event>();
 
-		try {
-			events = EventDAOImpl.getInstance().findAll();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
-		for (Event event : events) {
-			System.out.println(event.getId() + ": " + event.getSource());
-		}
+		events = EventDAOImpl.getInstance().findAll();
 
 		assertTrue(events.size() >= 0);
 	}
@@ -64,24 +56,15 @@ public class EventDAOImplTest {
 
 		event = EventDAOImpl.getInstance().insert(event);
 
-		if (event != null) {
-			System.out.println(event.getId() + ": "
-					+ event.getAuthor().getName());
-		}
-
 		assertTrue(null != event);
 	}
 
 	@Test
-	public void testFind() {
+	public void testFind() throws Exception {
 		Event event = new Event();
-		String id = "554591175d1cf51480b29cef";
+		String idEventFind = "554591175d1cf51480b29cef";
 
-		try {
-			event = EventDAOImpl.getInstance().find(id);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		event = EventDAOImpl.getInstance().find(idEventFind);
 
 		assertTrue(event != null && event.getAuthor() != null);
 	}
@@ -102,13 +85,13 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testJoin() throws UnknownHostException {
-		String id = "554591175d1cf51480b29cef";
+		String idEventJoin = "554591175d1cf51480b29cef";
 		Event event;
 
 		User partner = new User("New Partner", "New Partner",
 				"newpartner@gmail.com");
 
-		event = EventDAOImpl.getInstance().join(partner, id);
+		event = EventDAOImpl.getInstance().join(partner, idEventJoin);
 
 		assertTrue(event != null);
 	}

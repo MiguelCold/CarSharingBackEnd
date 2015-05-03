@@ -74,18 +74,18 @@ public class Car implements Serializable {
 
 		}
 
-		return (car);
+		return car;
 	}
 
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		if (null != this.getColor() && !this.getColor().trim().equals("")) {
+		if (null != this.getColor() && !("").equals(this.getColor().trim())) {
 			basicDBObject.put(COLOR, this.getColor().trim());
 		}
 
 		if (null != this.getCarriagePlate()
-				&& !this.getCarriagePlate().trim().equals("")) {
+				&& !("").equals(this.getCarriagePlate().trim())) {
 			basicDBObject.put(CARRIAGE_PLATE, this.getCarriagePlate().trim());
 		}
 
@@ -93,13 +93,13 @@ public class Car implements Serializable {
 			basicDBObject.put(BRAND, this.getBrand().entityToDBObject());
 		}
 
-		if (null != this.getModel() && !this.getModel().trim().equals("")) {
+		if (null != this.getModel() && !("").equals(this.getModel().trim())) {
 			basicDBObject.put(MODEL, this.getModel().trim());
 		}
 
 		basicDBObject.put(CAPACITY, this.getCapacity());
 
-		return (basicDBObject);
+		return basicDBObject;
 	}
 
 	public String getColor() {

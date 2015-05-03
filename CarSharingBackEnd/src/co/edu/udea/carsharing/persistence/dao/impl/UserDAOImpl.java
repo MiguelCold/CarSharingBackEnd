@@ -1,6 +1,7 @@
 package co.edu.udea.carsharing.persistence.dao.impl;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.udea.carsharing.model.entities.Car;
@@ -30,7 +31,7 @@ public class UserDAOImpl implements IUserDAO {
 			instance = new UserDAOImpl();
 		}
 
-		return (instance);
+		return instance;
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class UserDAOImpl implements IUserDAO {
 
 		if (null != dbObject) {
 
-			return (User.entityFromDBObject(dbObject));
+			return User.entityFromDBObject(dbObject);
 		}
 
 		return null;
@@ -49,20 +50,21 @@ public class UserDAOImpl implements IUserDAO {
 
 	@Override
 	public User insert(User user) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public User addCar(Car car) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public List<Car> getCarsByUser(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Car> cars = new ArrayList<Car>();
+
+		return cars;
 	}
 
 }

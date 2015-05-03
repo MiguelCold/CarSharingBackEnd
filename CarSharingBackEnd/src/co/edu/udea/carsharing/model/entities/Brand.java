@@ -41,21 +41,21 @@ public class Brand implements Serializable {
 			}
 		}
 
-		return (brand);
+		return brand;
 	}
 
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		if (null != this.getBrand() && !this.getBrand().trim().equals("")) {
+		if (null != this.getBrand() && !("").equals(this.getBrand().trim())) {
 			basicDBObject.put(BRAND, this.getBrand().trim());
 		}
 
-		if (null != this.getId() && !this.getId().trim().equals("")) {
+		if (null != this.getId() && !("").equals(this.getId().trim())) {
 			basicDBObject.put(ID, new ObjectId(this.getId().trim()));
 		}
 
-		return (basicDBObject);
+		return basicDBObject;
 	}
 
 	public String getId() {

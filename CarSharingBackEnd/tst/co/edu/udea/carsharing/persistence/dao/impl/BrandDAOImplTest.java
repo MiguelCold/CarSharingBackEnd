@@ -13,18 +13,10 @@ import co.edu.udea.carsharing.model.entities.Brand;
 public class BrandDAOImplTest {
 
 	@Test
-	public void testFindAll() {
+	public void testFindAll() throws UnknownHostException {
 		List<Brand> brands = new ArrayList<Brand>();
 
-		try {
-			brands = BrandDAOImpl.getInstance().findAll();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
-		for (Brand brand : brands) {
-			System.out.println(brand.getId() + ": " + brand.getBrand());
-		}
+		brands = BrandDAOImpl.getInstance().findAll();
 
 		assertTrue(brands.size() >= 0);
 	}
@@ -33,10 +25,6 @@ public class BrandDAOImplTest {
 	public void testInsert() throws UnknownHostException {
 		Brand brand = new Brand("MAZDA");
 		brand = BrandDAOImpl.getInstance().insert(brand);
-
-		if (brand != null) {
-			System.out.println(brand.getId() + ": " + brand.getBrand());
-		}
 
 		assertTrue(null != brand);
 	}

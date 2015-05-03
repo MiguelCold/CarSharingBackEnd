@@ -120,13 +120,13 @@ public class Event implements Serializable {
 			}
 		}
 
-		return (event);
+		return event;
 	}
 
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		if (null != this.getId() && !this.getId().trim().equals("")) {
+		if (null != this.getId() && !("").equals(this.getId().trim())) {
 			basicDBObject.put(ID, new ObjectId(this.getId().trim()));
 		}
 
@@ -182,7 +182,7 @@ public class Event implements Serializable {
 			basicDBObject.put(STATE, this.getState().trim());
 		}
 
-		return (basicDBObject);
+		return basicDBObject;
 	}
 
 	public String getId() {

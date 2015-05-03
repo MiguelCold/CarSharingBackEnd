@@ -49,7 +49,7 @@ public class Comment implements Serializable {
 			}
 		}
 
-		return (comment);
+		return comment;
 	}
 
 	public BasicDBObject entityToDBObject() {
@@ -59,7 +59,7 @@ public class Comment implements Serializable {
 			basicDBObject.put(AUTHOR, this.getAuthor().entityToDBObject());
 		}
 
-		if (null != this.getMessage() && !this.getMessage().trim().equals("")) {
+		if (null != this.getMessage() && !("").equals(this.getMessage().trim())) {
 			basicDBObject.put(MESSAGE, this.getMessage());
 		}
 
@@ -67,7 +67,7 @@ public class Comment implements Serializable {
 			basicDBObject.put(CREATEDATE, this.getCreateDate());
 		}
 
-		return (basicDBObject);
+		return basicDBObject;
 	}
 
 	public User getAuthor() {
@@ -93,5 +93,4 @@ public class Comment implements Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
 }

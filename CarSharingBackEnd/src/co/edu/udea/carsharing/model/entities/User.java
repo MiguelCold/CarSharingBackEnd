@@ -118,13 +118,13 @@ public class User implements Serializable {
 			}
 		}
 
-		return (user);
+		return user;
 	}
 
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
-		if (this.getId() != null && !this.getId().trim().equals("")) {
+		if (this.getId() != null && !("").equals(this.getId().trim())) {
 			basicDBObject.put(ID, new ObjectId(this.getId().trim()));
 		}
 
@@ -132,24 +132,26 @@ public class User implements Serializable {
 			basicDBObject.put(BIRTHDATE, this.getBirthDate());
 		}
 
-		if (null != this.getEmail() && !this.getEmail().trim().equals("")) {
+		if (null != this.getEmail() && !("").equals(this.getEmail().trim())) {
 			basicDBObject.put(EMAIL, this.getEmail());
 		}
 
 		if (null != this.getFacebookId()
-				&& !this.getFacebookId().trim().equals("")) {
+				&& !("").equals(this.getFacebookId().trim())) {
 			basicDBObject.put(FACEBOOK_ID, this.getFacebookId());
 		}
 
-		if (null != this.getLastName() && !this.getLastName().trim().equals("")) {
+		if (null != this.getLastName()
+				&& !("").equals(this.getLastName().trim())) {
 			basicDBObject.put(LAST_NAME, this.getLastName());
 		}
 
-		if (null != this.getPassword() && !this.getPassword().trim().equals("")) {
+		if (null != this.getPassword()
+				&& !("").equals(this.getPassword().trim())) {
 			basicDBObject.put(PASSWORD, this.getPassword());
 		}
 
-		if (null != this.getName() && !this.getName().trim().equals("")) {
+		if (null != this.getName() && !("").equals(this.getName().trim())) {
 			basicDBObject.put(NAME, this.getName());
 		}
 
@@ -162,7 +164,7 @@ public class User implements Serializable {
 			basicDBObject.put(CARS, basicDBList);
 		}
 
-		return (basicDBObject);
+		return basicDBObject;
 	}
 
 	public String getId() {

@@ -16,11 +16,11 @@ public enum StateEnum {
 		for (StateEnum stateEnum : StateEnum.values()) {
 			if (stateEnum.getState() == state) {
 
-				return (stateEnum);
+				return stateEnum;
 			}
 		}
 
-		return (null);
+		return null;
 	}
 
 	public int getState() {

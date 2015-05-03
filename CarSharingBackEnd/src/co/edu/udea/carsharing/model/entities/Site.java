@@ -40,24 +40,24 @@ public class Site implements Serializable {
 			}
 		}
 
-		return (site);
+		return site;
 	}
 
 	public BasicDBObject entityToDBObject() {
 		BasicDBObject basicDBObject = new BasicDBObject();
 
 		if (null != this.getGeographicalLocation()
-				&& !this.getGeographicalLocation().trim().equals("")) {
+				&& !("").equals(this.getGeographicalLocation().trim())) {
 			basicDBObject.put(GEOGRAPHICALLOCATION,
 					this.getGeographicalLocation());
 		}
 
 		if (null != this.getDescription()
-				&& !this.getDescription().trim().equals("")) {
+				&& !("").equals(this.getDescription().trim())) {
 			basicDBObject.put(DESCRIPTION, this.getDescription());
 		}
 
-		return (basicDBObject);
+		return basicDBObject;
 	}
 
 	public String getGeographicalLocation() {

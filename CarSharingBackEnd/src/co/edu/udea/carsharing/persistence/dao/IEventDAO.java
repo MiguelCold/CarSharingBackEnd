@@ -8,7 +8,7 @@ import co.edu.udea.carsharing.model.entities.User;
 
 public interface IEventDAO {
 
-	public Event find(String eventId);
+	public Event find(String eventId) throws Exception;
 
 	public List<Event> findAll();
 

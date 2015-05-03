@@ -48,26 +48,25 @@ public class EventDAOImpl implements IEventDAO {
 			instance = new EventDAOImpl();
 		}
 
-		return (instance);
+		return instance;
 	}
 
 	@Override
 	public Event find(String eventId) {
-		if (eventId != null && !eventId.equals("")) {
+		if (eventId != null && !("").equals(eventId.trim())) {
 			DBObject dbo;
 			try {
 				dbo = new BasicDBObject(ID, new ObjectId(eventId));
 			} catch (Exception e) {
 
-				return (null);
+				return null;
 			}
 			DBObject dbObject = this.collection.findOne(dbo);
 
-			return (Event.entityFromDBObject(dbObject));
+			return Event.entityFromDBObject(dbObject);
 		} else {
-			System.out.println("El par·metro eventId no puede ser Nulo");
 
-			return (null);
+			return null;
 		}
 	}
 
@@ -80,7 +79,7 @@ public class EventDAOImpl implements IEventDAO {
 			eventList.add(Event.entityFromDBObject(dbo));
 		}
 
-		return (eventList);
+		return eventList;
 	}
 
 	@Override
@@ -92,29 +91,32 @@ public class EventDAOImpl implements IEventDAO {
 			ObjectId id = (ObjectId) basicDBObject.get(ID);
 			DBObject dbObject = collection.findOne(id);
 
-			return ((null != dbObject && wr.getN() == 0) ? Event
-					.entityFromDBObject(dbObject) : null);
+			return (null != dbObject && wr.getN() == 0) ? Event
+					.entityFromDBObject(dbObject) : null;
 		} else {
 			System.out.println("El par·metro event no puede ser Nulo");
 
-			return (null);
+			return null;
 		}
 
 	}
 
 	@Override
 	public Event insertComment(Comment newComment, String eventId) {
-		if (eventId != null && !eventId.trim().equals("") && newComment != null) {
+		if (eventId != null && !("").equals(eventId.trim())
+				&& newComment != null) {
 			Event event = this.find(eventId);
 			if (event != null) {
 				event.getComments().add(newComment);
 				event = this.update(event);
+
+				return event;
 			} else {
 				System.out.println("No se ha encontrado el evento con id: "
 						+ eventId);
-			}
 
-			return event;
+				return null;
+			}
 		} else {
 			System.out.println("Los par·metros eventId y newComment deben "
 					+ "ser diferentes de Nulo");
@@ -124,22 +126,25 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event join(User newPartner, String eventId) {
-		if (eventId != null && !eventId.trim().equals("") && newPartner != null) {
+		if (eventId != null && !("").equals(eventId.trim())
+				&& newPartner != null) {
 			Event event = this.find(eventId);
 			if (event != null) {
 				event.getPartners().add(newPartner);
 				event = this.update(event);
+
+				return event;
 			} else {
 				System.out.println("No se ha encontrado el evento con id: "
 						+ eventId);
-			}
 
-			return (event);
+				return null;
+			}
 		} else {
 			System.out.println("Los par·metros eventId y newPartner deben "
 					+ "ser diferentes de Nulo");
 
-			return (null);
+			return null;
 		}
 	}
 
@@ -154,42 +159,48 @@ public class EventDAOImpl implements IEventDAO {
 			WriteResult wr = this.collection.update(searchingBasicDBObject,
 					updatingBasicDBObject, false, true);
 
-			return ((wr.getN() != 0) ? event : null);
+			return (wr.getN() != 0) ? event : null;
 		} else {
 			System.out.println("El par·metro event no puede ser Nulo");
 
-			return (null);
+			return null;
 		}
 	}
 
 	@Override
 	public Event leave(User leavingUser, String eventId) {
-		if (eventId != null && !eventId.equals("") && leavingUser != null) {
+		if (eventId != null && !("").equals(eventId.trim())
+				&& leavingUser != null) {
 			Event event = this.find(eventId);
 			if (event != null) {
 				event.getPartners().remove(leavingUser);
 				event = this.update(event);
+
+				return event;
 			} else {
 				System.out.println("No se ha encontrado el evento con id: "
 						+ eventId);
+
+				return null;
 			}
-			return event;
 		} else {
-			System.out.println("Los par√°metros eventId y leavingUser deben "
+			System.out.println("Los par·metros eventId y leavingUser deben "
 					+ "ser diferentes de Nulo");
+
 			return null;
 		}
 	}
 
 	@Override
 	public List<Event> cancel(String eventId) {
-		if (eventId != null && !eventId.equals("")) {
+		if (eventId != null && !("").equals(eventId.trim())) {
 			this.collection.remove(new BasicDBObject(ID, eventId));
 
-			return (this.findAll());
+			return this.findAll();
 		} else {
 			System.out.println("El par√°metro eventId no puede ser Nulo");
-			return (new ArrayList<Event>());
+
+			return new ArrayList<Event>();
 		}
 
 	}
