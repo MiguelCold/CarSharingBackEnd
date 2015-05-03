@@ -19,7 +19,7 @@ import co.edu.udea.carsharing.model.entities.util.StateEnum;
 
 public class EventDAOImplTest {
 
-	// @Test
+	@Test
 	public void testFindAll() {
 		List<Event> events = new ArrayList<Event>();
 
@@ -36,7 +36,7 @@ public class EventDAOImplTest {
 		assertTrue(events.size() >= 0);
 	}
 
-	// @Test
+	@Test
 	public void testInsert() throws UnknownHostException {
 		Brand brand = new Brand("CHEVROLET");
 		List<Car> cars = new ArrayList<Car>();
@@ -72,7 +72,7 @@ public class EventDAOImplTest {
 		assertTrue(null != event);
 	}
 
-	// @Test
+	@Test
 	public void testFind() {
 		Event event = new Event();
 		String id = "554591175d1cf51480b29cef";
@@ -86,7 +86,7 @@ public class EventDAOImplTest {
 		assertTrue(event != null && event.getAuthor() != null);
 	}
 
-	// @Test
+	@Test
 	public void testInsertComment() throws UnknownHostException {
 		String id = "554591175d1cf51480b29cef";
 		Event event;
