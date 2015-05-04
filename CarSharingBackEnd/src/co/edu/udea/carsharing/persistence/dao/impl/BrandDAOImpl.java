@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IBrandDAO;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -24,12 +25,12 @@ public class BrandDAOImpl implements IBrandDAO {
 	private static IBrandDAO instance;
 	private DBCollection collection;
 
-	private BrandDAOImpl() throws UnknownHostException {
+	private BrandDAOImpl() throws CarSharingDAOException, UnknownHostException {
 		this.collection = MongoDBConnector.connect(BRANDS_COLLECTION_NAME);
 	}
 
 	public static synchronized IBrandDAO getInstance()
-			throws UnknownHostException {
+			throws UnknownHostException, CarSharingDAOException {
 		if (null == instance) {
 			instance = new BrandDAOImpl();
 		}
@@ -38,7 +39,7 @@ public class BrandDAOImpl implements IBrandDAO {
 	}
 
 	@Override
-	public List<Brand> findAll() {
+	public List<Brand> findAll() throws CarSharingDAOException {
 		List<Brand> brands = new ArrayList<Brand>();
 
 		DBCursor dbCursor = this.collection.find();
@@ -50,7 +51,7 @@ public class BrandDAOImpl implements IBrandDAO {
 	}
 
 	@Override
-	public Brand insert(Brand brand) {
+	public Brand insert(Brand brand) throws CarSharingDAOException {
 		if (brand != null) {
 			BasicDBObject dbo = brand.entityToDBObject();
 			WriteResult wr = this.collection.insert(dbo);
@@ -61,9 +62,11 @@ public class BrandDAOImpl implements IBrandDAO {
 			return (null == dbObject && wr.getN() == 0) ? null : Brand
 					.entityFromDBObject(dbObject);
 		} else {
-			System.out.println("El parámetro no puede ser nulo.");
-
-			return null;
+			throw new CarSharingDAOException(
+					String.format(
+							"Clase %s: método: %s. El parámetro brand de tipo %s no puede ser nulo.",
+							BrandDAOImpl.class.getSimpleName(), "insert",
+							Brand.class.getSimpleName()));
 		}
 	}
 
