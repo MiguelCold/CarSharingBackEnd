@@ -1,6 +1,6 @@
 package co.edu.udea.carsharing.persistence.connection;
 
-import java.net.UnknownHostException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -20,18 +20,27 @@ public class MongoDBConnector {
 	}
 
 	public static DBCollection connect(String collectionName)
-			throws UnknownHostException {
-		mongoClientURI = new MongoClientURI(SERVER);
-		mongoClient = new MongoClient(mongoClientURI);
+			throws CarSharingTechnicalException {
+		try {
+			mongoClientURI = new MongoClientURI(SERVER);
+			mongoClient = new MongoClient(mongoClientURI);
 
-		@SuppressWarnings("deprecation")
-		DB db = mongoClient.getDB(DATA_BASE_NAME);
-		DBCollection collection = db.getCollection(collectionName);
+			@SuppressWarnings("deprecation")
+			DB db = mongoClient.getDB(DATA_BASE_NAME);
+			DBCollection collection = db.getCollection(collectionName);
 
-		if (collection == null) {
-			collection = db.createCollection(collectionName, null);
+			if (collection == null) {
+				collection = db.createCollection(collectionName, null);
+			}
+
+			return collection;
+		} catch (Exception e) {
+			throw new CarSharingTechnicalException(
+					String.format(
+							"Clase %s: método %s. Se produjo una excepción al tratar de conectarse"
+									+ " a la base de datos o al tratar de obtener la respectiva coleccion.\n%s",
+							MongoDBConnector.class.getSimpleName(),
+							"connect()", e));
 		}
-
-		return collection;
 	}
 }
