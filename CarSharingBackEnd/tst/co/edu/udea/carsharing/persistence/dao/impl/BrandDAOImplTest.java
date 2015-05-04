@@ -8,14 +8,16 @@ import java.util.List;
 
 import org.junit.Test;
 
+import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 public class BrandDAOImplTest {
 
 	@Test
 	public void testFindAll() throws UnknownHostException,
-			CarSharingDAOException {
+			CarSharingDAOException, CarSharingTechnicalException {
 		List<Brand> brands = new ArrayList<Brand>();
 
 		brands = BrandDAOImpl.getInstance().findAll();
@@ -25,11 +27,11 @@ public class BrandDAOImplTest {
 
 	@Test
 	public void testInsert() throws UnknownHostException,
-			CarSharingDAOException {
+			CarSharingDAOException, CarSharingBusinessException,
+			CarSharingTechnicalException {
 		Brand brand = new Brand("MAZDA");
 		brand = BrandDAOImpl.getInstance().insert(brand);
 
 		assertTrue(null != brand);
 	}
-
 }

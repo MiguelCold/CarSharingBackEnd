@@ -1,6 +1,5 @@
 package co.edu.udea.carsharing.persistence.dao.impl;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +12,7 @@ import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IEventDAO;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -38,12 +38,12 @@ public class EventDAOImpl implements IEventDAO {
 		INEQUALITIES.put("!=", "$ne");
 	}
 
-	private EventDAOImpl() throws UnknownHostException {
+	private EventDAOImpl() throws CarSharingTechnicalException {
 		this.collection = MongoDBConnector.connect(EVENTS_COLLECTION_NAME);
 	}
 
 	public static synchronized IEventDAO getInstance()
-			throws UnknownHostException {
+			throws CarSharingTechnicalException {
 		if (instance == null) {
 			instance = new EventDAOImpl();
 		}

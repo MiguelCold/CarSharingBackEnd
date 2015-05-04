@@ -16,11 +16,12 @@ import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.Site;
 import co.edu.udea.carsharing.model.entities.User;
 import co.edu.udea.carsharing.model.entities.util.StateEnum;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 public class EventDAOImplTest {
 
 	@Test
-	public void testFindAll() throws UnknownHostException {
+	public void testFindAll() throws CarSharingTechnicalException {
 		List<Event> events = new ArrayList<Event>();
 
 		events = EventDAOImpl.getInstance().findAll();
@@ -29,7 +30,8 @@ public class EventDAOImplTest {
 	}
 
 	@Test
-	public void testInsert() throws UnknownHostException {
+	public void testInsert() throws UnknownHostException,
+			CarSharingTechnicalException {
 		Brand brand = new Brand("CHEVROLET");
 		List<Car> cars = new ArrayList<Car>();
 		Car car = new Car("Blanco", "hil456", brand, "2014", 4);
@@ -70,7 +72,8 @@ public class EventDAOImplTest {
 	}
 
 	@Test
-	public void testInsertComment() throws UnknownHostException {
+	public void testInsertComment() throws UnknownHostException,
+			CarSharingTechnicalException {
 		String id = "554591175d1cf51480b29cef";
 		Event event;
 
@@ -84,7 +87,8 @@ public class EventDAOImplTest {
 	}
 
 	@Test
-	public void testJoin() throws UnknownHostException {
+	public void testJoin() throws UnknownHostException,
+			CarSharingTechnicalException {
 		String idEventJoin = "554591175d1cf51480b29cef";
 		Event event;
 

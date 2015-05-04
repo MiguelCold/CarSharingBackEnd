@@ -1,15 +1,16 @@
 package co.edu.udea.carsharing.persistence.dao.impl;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 
+import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IBrandDAO;
 import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -25,12 +26,12 @@ public class BrandDAOImpl implements IBrandDAO {
 	private static IBrandDAO instance;
 	private DBCollection collection;
 
-	private BrandDAOImpl() throws CarSharingDAOException, UnknownHostException {
+	private BrandDAOImpl() throws CarSharingTechnicalException {
 		this.collection = MongoDBConnector.connect(BRANDS_COLLECTION_NAME);
 	}
 
 	public static synchronized IBrandDAO getInstance()
-			throws UnknownHostException, CarSharingDAOException {
+			throws CarSharingTechnicalException {
 		if (null == instance) {
 			instance = new BrandDAOImpl();
 		}
@@ -40,34 +41,50 @@ public class BrandDAOImpl implements IBrandDAO {
 
 	@Override
 	public List<Brand> findAll() throws CarSharingDAOException {
-		List<Brand> brands = new ArrayList<Brand>();
+		try {
+			List<Brand> brands = new ArrayList<Brand>();
 
-		DBCursor dbCursor = this.collection.find();
-		for (DBObject dbObject : dbCursor) {
-			brands.add(Brand.entityFromDBObject(dbObject));
+			DBCursor dbCursor = this.collection.find();
+			for (DBObject dbObject : dbCursor) {
+				brands.add(Brand.entityFromDBObject(dbObject));
+			}
+
+			return brands;
+		} catch (Exception e) {
+			throw new CarSharingDAOException(
+					String.format(
+							"Clase %s: método: %s. Error mientras se obtenían todos objetos %s.\n%s",
+							BrandDAOImpl.class.getSimpleName(), "findAll()",
+							Brand.class.getSimpleName(), e));
 		}
-
-		return brands;
 	}
 
 	@Override
-	public Brand insert(Brand brand) throws CarSharingDAOException {
-		if (brand != null) {
-			BasicDBObject dbo = brand.entityToDBObject();
-			WriteResult wr = this.collection.insert(dbo);
+	public Brand insert(Brand brand) throws CarSharingDAOException,
+			CarSharingBusinessException {
+		try {
+			if (brand != null) {
+				BasicDBObject dbo = brand.entityToDBObject();
+				WriteResult wr = this.collection.insert(dbo);
 
-			ObjectId id = (ObjectId) dbo.get(ID);
-			DBObject dbObject = collection.findOne(id);
+				ObjectId id = (ObjectId) dbo.get(ID);
+				DBObject dbObject = collection.findOne(id);
 
-			return (null == dbObject && wr.getN() == 0) ? null : Brand
-					.entityFromDBObject(dbObject);
-		} else {
+				return (null == dbObject && wr.getN() == 0) ? null : Brand
+						.entityFromDBObject(dbObject);
+			} else {
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método: %s. El parámetro brand de tipo %s no puede ser nulo.",
+								BrandDAOImpl.class.getSimpleName(), "insert()",
+								Brand.class.getSimpleName()));
+			}
+		} catch (Exception e) {
 			throw new CarSharingDAOException(
 					String.format(
-							"Clase %s: método: %s. El parámetro brand de tipo %s no puede ser nulo.",
-							BrandDAOImpl.class.getSimpleName(), "insert",
-							Brand.class.getSimpleName()));
+							"Clase %s: Se presentó un error inesperado mientras se ejecutaba el método %s.\n%s",
+							BrandDAOImpl.class.getSimpleName(), "insert()", e));
 		}
-	}
 
+	}
 }
