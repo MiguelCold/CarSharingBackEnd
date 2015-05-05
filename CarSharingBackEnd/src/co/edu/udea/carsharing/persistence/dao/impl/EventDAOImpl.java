@@ -7,11 +7,14 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
+import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
+import co.edu.udea.carsharing.model.entities.util.StateEnum;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IEventDAO;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
 import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBObject;
@@ -28,7 +31,8 @@ public class EventDAOImpl implements IEventDAO {
 
 	private static final String EVENTS_COLLECTION_NAME = "Events";
 	private static final String ID = "_id";
-	public static final Map<String, String> INEQUALITIES = new HashMap<>();
+	private static final String STATE = "state";
+	public static final Map<String, String> INEQUALITIES = new HashMap<String, String>();
 
 	static {
 		INEQUALITIES.put("<", "$lt");
@@ -52,156 +56,185 @@ public class EventDAOImpl implements IEventDAO {
 	}
 
 	@Override
-	public Event find(String eventId) {
-		if (eventId != null && !("").equals(eventId.trim())) {
-			DBObject dbo;
-			try {
-				dbo = new BasicDBObject(ID, new ObjectId(eventId));
-			} catch (Exception e) {
+	public Event find(String eventId) throws CarSharingDAOException,
+			CarSharingBusinessException {
+		try {
+			if (eventId != null && !("").equals(eventId.trim())) {
+				DBObject dbo = new BasicDBObject(ID, new ObjectId(eventId));
+				DBObject dbObject = this.collection.findOne(dbo);
 
-				return null;
+				return Event.entityFromDBObject(dbObject);
+			} else {
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método %s. "
+										+ "El parámetro eventId (%s) no puede ser ni nulo ni vacío.",
+								EventDAOImpl.class.getSimpleName(), "find()",
+								String.class.getSimpleName()));
 			}
-			DBObject dbObject = this.collection.findOne(dbo);
-
-			return Event.entityFromDBObject(dbObject);
-		} else {
-
-			return null;
+		} catch (Exception e) {
+			throw new CarSharingDAOException(String.format(
+					"Clase: %s: método %s. Se ha presentado un error inesperado al tratar "
+							+ "de encontrar un evento por id.\n%s",
+					EventDAOImpl.class.getSimpleName(), "find()", e));
 		}
 	}
 
 	@Override
-	public List<Event> findAll() {
-		List<Event> eventList = new ArrayList<>();
-		DBCursor dbCursor = this.collection.find();
+	public List<Event> findAll() throws CarSharingDAOException {
+		try {
+			List<Event> eventList = new ArrayList<Event>();
 
-		for (DBObject dbo : dbCursor) {
-			eventList.add(Event.entityFromDBObject(dbo));
+			BasicDBObject query = new BasicDBObject(STATE,
+					StateEnum.ACTIVE.getDescription());
+			DBCursor dbCursor = this.collection
+					.find(query, new BasicDBObject());
+
+			for (DBObject dbo : dbCursor) {
+				eventList.add(Event.entityFromDBObject(dbo));
+			}
+
+			return eventList;
+		} catch (Exception e) {
+			throw new CarSharingDAOException(
+					String.format(
+							"Clase %s: método %s. Se ha producido un error inesperado al "
+									+ "tratar de obtener todos los eventos activos.\n%s",
+							EventDAOImpl.class.getSimpleName(), "findAll()", e));
 		}
-
-		return eventList;
 	}
 
 	@Override
-	public Event insert(Event event) {
-		if (event != null) {
-			BasicDBObject basicDBObject = event.entityToDBObject();
-			WriteResult wr = this.collection.insert(basicDBObject);
-
-			ObjectId id = (ObjectId) basicDBObject.get(ID);
-			DBObject dbObject = collection.findOne(id);
-
-			return (null != dbObject && wr.getN() == 0) ? Event
-					.entityFromDBObject(dbObject) : null;
-		} else {
-			System.out.println("El parámetro event no puede ser Nulo");
-
-			return null;
-		}
-
-	}
-
-	@Override
-	public Event insertComment(Comment newComment, String eventId) {
-		if (eventId != null && !("").equals(eventId.trim())
-				&& newComment != null) {
-			Event event = this.find(eventId);
+	public Event insert(Event event) throws CarSharingDAOException,
+			CarSharingBusinessException {
+		try {
 			if (event != null) {
-				event.getComments().add(newComment);
-				event = this.update(event);
+				event.setState(StateEnum.ACTIVE.getDescription());
+				BasicDBObject basicDBObject = event.entityToDBObject();
+				WriteResult wr = this.collection.insert(basicDBObject);
+
+				ObjectId id = (ObjectId) basicDBObject.get(ID);
+				DBObject dbObject = collection.findOne(id);
+
+				return (null != dbObject && wr.getN() == 0) ? Event
+						.entityFromDBObject(dbObject) : null;
+			} else {
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método %s. El parámetro event (%s) no puede ser nulo.",
+								EventDAOImpl.class.getSimpleName(), "insert()",
+								Event.class.getSimpleName()));
+			}
+		} catch (Exception e) {
+			throw new CarSharingDAOException(String.format(
+					"Clase %s: método %s. Se ha presentado un error inesperado mientras "
+							+ "se trataba de insertar un evento.\n%s.",
+					EventDAOImpl.class.getSimpleName(), "insert()", e));
+		}
+	}
+
+	@Override
+	public Event insertComment(Comment newComment, String eventId)
+			throws CarSharingDAOException, CarSharingBusinessException {
+		try {
+			if (eventId != null && !("").equals(eventId.trim())
+					&& newComment != null) {
+				Event event = this.find(eventId);
+				if (event != null
+						&& StateEnum.ACTIVE.getDescription().equals(
+								event.getState().trim())) {
+					event.getComments().add(newComment);
+					event = this.update(event);
+				}
 
 				return event;
 			} else {
-				System.out.println("No se ha encontrado el evento con id: "
-						+ eventId);
-
-				return null;
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método %s. El parámetro eventId (%s) no puede ser nulo "
+										+ "ni vacío y el parámetro newComment (%s) no puede ser nulo.",
+								EventDAOImpl.class.getSimpleName(),
+								"insertComment()",
+								String.class.getSimpleName(),
+								Comment.class.getSimpleName()));
 			}
-		} else {
-			System.out.println("Los parámetros eventId y newComment deben "
-					+ "ser diferentes de Nulo");
-			return null;
+		} catch (Exception e) {
+			throw new CarSharingDAOException(
+					String.format(
+							"Clase %s: método %s. Se ha presentado un error inesperado "
+									+ "mmientras se trataba de agregar un comentario en un "
+									+ "evento previamente creado.\n%s",
+							EventDAOImpl.class.getSimpleName(),
+							"insertComment()", e));
 		}
 	}
 
 	@Override
-	public Event join(User newPartner, String eventId) {
-		if (eventId != null && !("").equals(eventId.trim())
-				&& newPartner != null) {
-			Event event = this.find(eventId);
-			if (event != null) {
-				event.getPartners().add(newPartner);
-				event = this.update(event);
+	public Event join(User newPartner, String eventId)
+			throws CarSharingDAOException, CarSharingBusinessException {
+		try {
+			if (eventId != null && !("").equals(eventId.trim())
+					&& newPartner != null) {
+				Event event = this.find(eventId);
+				if (event != null
+						&& StateEnum.ACTIVE.getDescription().equals(
+								event.getState().trim())) {
+					event.getPartners().add(newPartner);
+					event = this.update(event);
+				}
 
 				return event;
 			} else {
-				System.out.println("No se ha encontrado el evento con id: "
-						+ eventId);
-
-				return null;
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método %s. El parámetro eventId (%s) no puede ser nulo "
+										+ "ni vacío y el parámetro newPartner (%s) no puede ser nulo.",
+								EventDAOImpl.class.getSimpleName(), "join()",
+								String.class.getSimpleName(),
+								User.class.getSimpleName()));
 			}
-		} else {
-			System.out.println("Los parámetros eventId y newPartner deben "
-					+ "ser diferentes de Nulo");
-
-			return null;
+		} catch (Exception e) {
+			throw new CarSharingDAOException(
+					String.format(
+							"Clase %s: método %s. Se ha presentado un error inesperado "
+									+ "mmientras se trataba de agregar un nuevo usuario a un "
+									+ "evento previamente creado.\n%s",
+							EventDAOImpl.class.getSimpleName(), "join()", e));
 		}
 	}
 
 	@Override
-	public Event update(Event event) {
-		if (event != null) {
-			BasicDBObject searchingBasicDBObject = new BasicDBObject(ID,
-					new ObjectId(event.getId()));
-			BasicDBObject updatingBasicDBObject = new BasicDBObject("$set",
-					event.entityToDBObject());
-
-			WriteResult wr = this.collection.update(searchingBasicDBObject,
-					updatingBasicDBObject, false, true);
-
-			return (wr.getN() != 0) ? event : null;
-		} else {
-			System.out.println("El parámetro event no puede ser Nulo");
-
-			return null;
-		}
-	}
-
-	@Override
-	public Event leave(User leavingUser, String eventId) {
-		if (eventId != null && !("").equals(eventId.trim())
-				&& leavingUser != null) {
-			Event event = this.find(eventId);
+	public Event update(Event event) throws CarSharingDAOException,
+			CarSharingBusinessException {
+		try {
 			if (event != null) {
-				event.getPartners().remove(leavingUser);
-				event = this.update(event);
+				if (StateEnum.ACTIVE.getDescription().equals(
+						event.getState().trim())) {
+					BasicDBObject searchingBasicDBObject = new BasicDBObject(
+							ID, new ObjectId(event.getId()));
+					BasicDBObject updatingBasicDBObject = new BasicDBObject(
+							"$set", event.entityToDBObject());
 
-				return event;
-			} else {
-				System.out.println("No se ha encontrado el evento con id: "
-						+ eventId);
+					WriteResult wr = this.collection.update(
+							searchingBasicDBObject, updatingBasicDBObject,
+							false, true);
+
+					return (wr.getN() != 0) ? event : null;
+				}
 
 				return null;
+			} else {
+				throw new CarSharingBusinessException(String.format(
+						"Clase %s: método %s. El parámetro event (%s) no puede ser nulo y "
+								+ "debe estar en estado Activo.",
+						EventDAOImpl.class.getSimpleName(), "update()",
+						Event.class.getSimpleName()));
 			}
-		} else {
-			System.out.println("Los parámetros eventId y leavingUser deben "
-					+ "ser diferentes de Nulo");
-
-			return null;
+		} catch (Exception e) {
+			throw new CarSharingDAOException(String.format(
+					"Clase %s: método %s. Se ha producido un error inesperado mientras "
+							+ "se trataba de actualizar un evento activo.\n%s",
+					EventDAOImpl.class.getSimpleName(), "update()", e));
 		}
-	}
-
-	@Override
-	public List<Event> cancel(String eventId) {
-		if (eventId != null && !("").equals(eventId.trim())) {
-			this.collection.remove(new BasicDBObject(ID, eventId));
-
-			return this.findAll();
-		} else {
-			System.out.println("El parÃ¡metro eventId no puede ser Nulo");
-
-			return new ArrayList<Event>();
-		}
-
 	}
 }

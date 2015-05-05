@@ -44,7 +44,7 @@ public class Event implements Serializable {
 	}
 
 	public Event(Date createDate, Date eventDate, User author, Car car,
-			Site source, Site target, double value, String state) {
+			Site source, Site target, double value) {
 		this.createDate = createDate;
 		this.eventDate = eventDate;
 		this.author = author;
@@ -52,7 +52,6 @@ public class Event implements Serializable {
 		this.source = source;
 		this.target = target;
 		this.value = value;
-		this.state = state;
 	}
 
 	public static Event entityFromDBObject(DBObject dbObject) {

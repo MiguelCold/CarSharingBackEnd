@@ -2,26 +2,28 @@ package co.edu.udea.carsharing.persistence.dao;
 
 import java.util.List;
 
+import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
 
 public interface IEventDAO {
 
-	public Event find(String eventId) throws Exception;
+	public Event find(String eventId) throws CarSharingDAOException,
+			CarSharingBusinessException;
 
-	public List<Event> findAll();
+	public List<Event> findAll() throws CarSharingDAOException;
 
-	public Event insert(Event event);
+	public Event insert(Event event) throws CarSharingDAOException,
+			CarSharingBusinessException;
 
-	public Event insertComment(Comment newComment, String eventId);
+	public Event insertComment(Comment newComment, String eventId)
+			throws CarSharingDAOException, CarSharingBusinessException;
 
-	public Event join(User newPartner, String eventId);
+	public Event join(User newPartner, String eventId)
+			throws CarSharingDAOException, CarSharingBusinessException;
 
-	public Event update(Event event);
-
-	public Event leave(User leavingUser, String eventId);
-
-	public List<Event> cancel(String eventId);
-
+	public Event update(Event event) throws CarSharingDAOException,
+			CarSharingBusinessException;
 }

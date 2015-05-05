@@ -6,6 +6,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoException;
 
 public class MongoDBConnector {
 
@@ -34,7 +35,7 @@ public class MongoDBConnector {
 			}
 
 			return collection;
-		} catch (Exception e) {
+		} catch (MongoException | NullPointerException e) {
 			throw new CarSharingTechnicalException(
 					String.format(
 							"Clase %s: método %s. Se produjo una excepción al tratar de conectarse"

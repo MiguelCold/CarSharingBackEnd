@@ -2,26 +2,27 @@ package co.edu.udea.carsharing.persistence.dao.impl;
 
 import static org.junit.Assert.assertTrue;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
 
+import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.Site;
 import co.edu.udea.carsharing.model.entities.User;
-import co.edu.udea.carsharing.model.entities.util.StateEnum;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
 import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 public class EventDAOImplTest {
 
 	@Test
-	public void testFindAll() throws CarSharingTechnicalException {
+	public void testFindAll() throws CarSharingDAOException,
+			CarSharingTechnicalException {
 		List<Event> events = new ArrayList<Event>();
 
 		events = EventDAOImpl.getInstance().findAll();
@@ -29,9 +30,9 @@ public class EventDAOImplTest {
 		assertTrue(events.size() >= 0);
 	}
 
-	@Test
-	public void testInsert() throws UnknownHostException,
-			CarSharingTechnicalException {
+	// @Test
+	public void testInsert() throws CarSharingDAOException,
+			CarSharingBusinessException, CarSharingTechnicalException {
 		Brand brand = new Brand("CHEVROLET");
 		List<Car> cars = new ArrayList<Car>();
 		Car car = new Car("Blanco", "hil456", brand, "2014", 4);
@@ -41,7 +42,6 @@ public class EventDAOImplTest {
 				"miguelcold8@gmail.com");
 		Site source = new Site("location", "U de A");
 		Site target = new Site("location", "U de A");
-		String state = StateEnum.ACTIVE.getDescription();
 
 		List<Comment> comments = new ArrayList<Comment>();
 		comments.add(new Comment(author, "Comentario 1", new Date()));
@@ -52,7 +52,7 @@ public class EventDAOImplTest {
 		partners.add(new User("Partner 2", "Partner 2", "partner2@gmail.com"));
 
 		Event event = new Event(new Date(), new Date(), author, car, source,
-				target, 1000, state);
+				target, 1000);
 		event.setComments(comments);
 		event.setPartners(partners);
 
@@ -62,9 +62,10 @@ public class EventDAOImplTest {
 	}
 
 	@Test
-	public void testFind() throws Exception {
+	public void testFind() throws CarSharingDAOException,
+			CarSharingBusinessException, CarSharingTechnicalException {
 		Event event = new Event();
-		String idEventFind = "554591175d1cf51480b29cef";
+		String idEventFind = "55483cc45d1cf517247b5eef";
 
 		event = EventDAOImpl.getInstance().find(idEventFind);
 
@@ -72,24 +73,23 @@ public class EventDAOImplTest {
 	}
 
 	@Test
-	public void testInsertComment() throws UnknownHostException,
-			CarSharingTechnicalException {
-		String id = "554591175d1cf51480b29cef";
-		Event event;
+	public void testInsertComment() throws CarSharingDAOException,
+			CarSharingBusinessException, CarSharingTechnicalException {
+		String id = "55483cc45d1cf517247b5eef";
 
 		User author = new User("Nombre Comentario 4", "Apellidos Comentario 4",
 				"test4@gmail.com");
 		Comment comment = new Comment(author, "Comentario 4", new Date());
 
-		event = EventDAOImpl.getInstance().insertComment(comment, id);
+		Event event = EventDAOImpl.getInstance().insertComment(comment, id);
 
 		assertTrue(event != null);
 	}
 
 	@Test
-	public void testJoin() throws UnknownHostException,
-			CarSharingTechnicalException {
-		String idEventJoin = "554591175d1cf51480b29cef";
+	public void testJoin() throws CarSharingDAOException,
+			CarSharingBusinessException, CarSharingTechnicalException {
+		String idEventJoin = "55483cc45d1cf517247b5eef";
 		Event event;
 
 		User partner = new User("New Partner", "New Partner",
