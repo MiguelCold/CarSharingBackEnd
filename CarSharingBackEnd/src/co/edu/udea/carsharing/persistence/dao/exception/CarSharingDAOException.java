@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  * superiores el manejo de los errores y la informaci&oacute;n que estos
  * contengan.
  * 
- * @since JDK1.8
+ * @since JDK1.7
  * 
  * @version 1.0
  * 
