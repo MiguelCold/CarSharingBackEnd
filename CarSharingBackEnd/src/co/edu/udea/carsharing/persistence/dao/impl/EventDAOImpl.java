@@ -13,9 +13,9 @@ import co.edu.udea.carsharing.model.entities.User;
 import co.edu.udea.carsharing.model.entities.enums.StateEnum;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IEventDAO;
-import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
-import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
-import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.persistence.exception.CarSharingPersistenceBusinessException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -57,7 +57,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event find(String eventId) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (eventId != null && !("").equals(eventId.trim())) {
 				DBObject dbo = new BasicDBObject(ID, new ObjectId(eventId));
@@ -65,7 +65,7 @@ public class EventDAOImpl implements IEventDAO {
 
 				return Event.entityFromDBObject(dbObject);
 			} else {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método %s. "
 										+ "El parámetro eventId (%s) no puede ser ni nulo ni vacío.",
@@ -106,7 +106,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event insert(Event event) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (event != null) {
 				event.setState(StateEnum.ACTIVE.getDescription());
@@ -119,7 +119,7 @@ public class EventDAOImpl implements IEventDAO {
 				return (null != dbObject && wr.getN() == 0) ? Event
 						.entityFromDBObject(dbObject) : null;
 			} else {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método %s. El parámetro event (%s) no puede ser nulo.",
 								EventDAOImpl.class.getSimpleName(), "insert()",
@@ -135,7 +135,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event insertComment(Comment newComment, String eventId)
-			throws CarSharingDAOException, CarSharingBusinessException {
+			throws CarSharingDAOException, CarSharingPersistenceBusinessException {
 		try {
 			if (eventId != null && !("").equals(eventId.trim())
 					&& newComment != null) {
@@ -149,7 +149,7 @@ public class EventDAOImpl implements IEventDAO {
 
 				return event;
 			} else {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método %s. El parámetro eventId (%s) no puede ser nulo "
 										+ "ni vacío y el parámetro newComment (%s) no puede ser nulo.",
@@ -171,7 +171,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event join(User newPartner, String eventId)
-			throws CarSharingDAOException, CarSharingBusinessException {
+			throws CarSharingDAOException, CarSharingPersistenceBusinessException {
 		try {
 			if (eventId != null && !("").equals(eventId.trim())
 					&& newPartner != null) {
@@ -185,7 +185,7 @@ public class EventDAOImpl implements IEventDAO {
 
 				return event;
 			} else {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método %s. El parámetro eventId (%s) no puede ser nulo "
 										+ "ni vacío y el parámetro newPartner (%s) no puede ser nulo.",
@@ -205,7 +205,7 @@ public class EventDAOImpl implements IEventDAO {
 
 	@Override
 	public Event update(Event event) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (event != null) {
 				if (StateEnum.ACTIVE.getDescription().equals(
@@ -224,7 +224,7 @@ public class EventDAOImpl implements IEventDAO {
 
 				return null;
 			} else {
-				throw new CarSharingBusinessException(String.format(
+				throw new CarSharingPersistenceBusinessException(String.format(
 						"Clase %s: método %s. El parámetro event (%s) no puede ser nulo y "
 								+ "debe estar en estado Activo.",
 						EventDAOImpl.class.getSimpleName(), "update()",

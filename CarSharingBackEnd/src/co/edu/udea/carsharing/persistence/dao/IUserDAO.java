@@ -4,23 +4,22 @@ import java.util.List;
 
 import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.User;
-import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
-import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.persistence.exception.CarSharingPersistenceBusinessException;
 
 public interface IUserDAO {
 
 	public User findByEmailAndPassword(String email, String password)
-			throws CarSharingDAOException, CarSharingBusinessException;
+			throws CarSharingDAOException, CarSharingPersistenceBusinessException;
 
 	public User findByEmail(String email) throws CarSharingDAOException,
-			CarSharingBusinessException;
+			CarSharingPersistenceBusinessException;
 
 	public User insert(User user) throws CarSharingDAOException,
-			CarSharingBusinessException;
+			CarSharingPersistenceBusinessException;
 
 	public User addCar(String email, Car car) throws CarSharingDAOException,
-			CarSharingBusinessException;
+			CarSharingPersistenceBusinessException;
 
 	public List<Car> getCarsByUser(String email) throws CarSharingDAOException;
-
 }

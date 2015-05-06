@@ -1,6 +1,6 @@
 package co.edu.udea.carsharing.persistence.connection;
 
-import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;

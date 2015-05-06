@@ -1,4 +1,4 @@
-package co.edu.udea.carsharing.util.exception;
+package co.edu.udea.carsharing.persistence.dao.exception;
 
 import org.apache.log4j.Logger;
 
@@ -22,20 +22,19 @@ import org.apache.log4j.Logger;
  * @author Juan Pablo Nore&ntilde;a Bland&oacute;n
  * @author Juan Camilo Giraldo Chaverra
  */
-public class CarSharingBusinessException extends Exception {
+public class CarSharingDAOException extends Exception {
 
 	/**
 	 * Atributo constante para realizar la gesti&oacute;n de los errores a
 	 * trav&eacute;s de un <b>LOG</b> gen&eacute;rico.
 	 */
 	private static final Logger LOGGER = Logger
-			.getLogger(CarSharingBusinessException.class);
+			.getLogger(CarSharingDAOException.class);
 
 	/**
 	 * Constante utilizada para realizar operaciones de serializaci&oacute;n y
-	 * deserializaci&oacute;n de la instancia
-	 * {@code CarSharingBusinessException}, e igualmente, de todos los atributos
-	 * esta instancia agrupe.
+	 * deserializaci&oacute;n de la instancia {@code CarSharingDAOException}, e
+	 * igualmente, de todos los atributos esta instancia agrupe.
 	 */
 	private static final long serialVersionUID = -4468696866004400516L;
 
@@ -48,9 +47,9 @@ public class CarSharingBusinessException extends Exception {
 	 * capacidad de escribir en el archivo de LOG definido para la
 	 * aplicaci&oacute;n.
 	 */
-	public CarSharingBusinessException() {
+	public CarSharingDAOException() {
 		super();
-		LOGGER.error("CarSharingBusinessException: An error has happened during process.");
+		LOGGER.error("CarSharingDAOException: An error has happened during process.");
 	}
 
 	/**
@@ -63,9 +62,9 @@ public class CarSharingBusinessException extends Exception {
 	 *            Instancia que representa el mensaje personalizado sobre el
 	 *            error o excepci&oacute;n ocurrida.
 	 */
-	public CarSharingBusinessException(String message) {
+	public CarSharingDAOException(String message) {
 		super(message);
-		LOGGER.error("CarSharingBusinessException: An error has happened during process."
+		LOGGER.error("CarSharingDAOException: An error has happened during process."
 				+ message);
 	}
 
@@ -79,10 +78,10 @@ public class CarSharingBusinessException extends Exception {
 	 *            Instancia que representa la causa o raz&oacute;n del error a
 	 *            ser lanzado.
 	 */
-	public CarSharingBusinessException(Throwable cause) {
+	public CarSharingDAOException(Throwable cause) {
 		super(cause);
 		LOGGER.error(
-				"CarSharingBusinessException: An error has happened during process.",
+				"CarSharingDAOException: An error has happened during process.",
 				cause);
 	}
 
@@ -100,10 +99,10 @@ public class CarSharingBusinessException extends Exception {
 	 *            Instancia que representa la causa o raz&oacute;n del error a
 	 *            ser lanzado.
 	 */
-	public CarSharingBusinessException(String message, Throwable cause) {
+	public CarSharingDAOException(String message, Throwable cause) {
 		super(message, cause);
 		LOGGER.error(
-				"CarSharingBusinessException: An error has happened during process.",
+				"CarSharingDAOException: An error has happened during process.",
 				cause);
 	}
 
@@ -128,11 +127,11 @@ public class CarSharingBusinessException extends Exception {
 	 *            <code>true</code> indica que el mensaje ha de ser escrito en
 	 *            la pila de llamadas.
 	 */
-	public CarSharingBusinessException(String message, Throwable cause,
+	public CarSharingDAOException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		LOGGER.error(
-				"CarSharingBusinessException: An error has happened during process.",
+				"CarSharingDAOException: An error has happened during process.",
 				cause);
 	}
 }

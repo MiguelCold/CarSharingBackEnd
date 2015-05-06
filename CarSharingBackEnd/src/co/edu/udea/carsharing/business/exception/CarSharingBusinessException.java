@@ -1,4 +1,4 @@
-package co.edu.udea.carsharing.util.exception;
+package co.edu.udea.carsharing.business.exception;
 
 import org.apache.log4j.Logger;
 
@@ -22,20 +22,20 @@ import org.apache.log4j.Logger;
  * @author Juan Pablo Nore&ntilde;a Bland&oacute;n
  * @author Juan Camilo Giraldo Chaverra
  */
-public class CarSharingTechnicalException extends Exception {
+public class CarSharingBusinessException extends Exception {
 
 	/**
 	 * Atributo constante para realizar la gesti&oacute;n de los errores a
 	 * trav&eacute;s de un <b>LOG</b> gen&eacute;rico.
 	 */
 	private static final Logger LOGGER = Logger
-			.getLogger(CarSharingTechnicalException.class);
+			.getLogger(CarSharingBusinessException.class);
 
 	/**
 	 * Constante utilizada para realizar operaciones de serializaci&oacute;n y
 	 * deserializaci&oacute;n de la instancia
-	 * {@code CarSharingTechnicalException}, e igualmente, de todos los
-	 * atributos esta instancia agrupe.
+	 * {@code CarSharingBusinessException}, e igualmente, de todos los atributos
+	 * esta instancia agrupe.
 	 */
 	private static final long serialVersionUID = -4468696866004400516L;
 
@@ -48,9 +48,9 @@ public class CarSharingTechnicalException extends Exception {
 	 * capacidad de escribir en el archivo de LOG definido para la
 	 * aplicaci&oacute;n.
 	 */
-	public CarSharingTechnicalException() {
+	public CarSharingBusinessException() {
 		super();
-		LOGGER.error("CarSharingTechnicalException: An error has happened during process.");
+		LOGGER.error("CarSharingBusinessException: An error has happened during process.");
 	}
 
 	/**
@@ -63,9 +63,9 @@ public class CarSharingTechnicalException extends Exception {
 	 *            Instancia que representa el mensaje personalizado sobre el
 	 *            error o excepci&oacute;n ocurrida.
 	 */
-	public CarSharingTechnicalException(String message) {
+	public CarSharingBusinessException(String message) {
 		super(message);
-		LOGGER.error("CarSharingTechnicalException: An error has happened during process."
+		LOGGER.error("CarSharingBusinessException: An error has happened during process."
 				+ message);
 	}
 
@@ -79,10 +79,10 @@ public class CarSharingTechnicalException extends Exception {
 	 *            Instancia que representa la causa o raz&oacute;n del error a
 	 *            ser lanzado.
 	 */
-	public CarSharingTechnicalException(Throwable cause) {
+	public CarSharingBusinessException(Throwable cause) {
 		super(cause);
 		LOGGER.error(
-				"CarSharingTechnicalException: An error has happened during process.",
+				"CarSharingBusinessException: An error has happened during process.",
 				cause);
 	}
 
@@ -100,10 +100,10 @@ public class CarSharingTechnicalException extends Exception {
 	 *            Instancia que representa la causa o raz&oacute;n del error a
 	 *            ser lanzado.
 	 */
-	public CarSharingTechnicalException(String message, Throwable cause) {
+	public CarSharingBusinessException(String message, Throwable cause) {
 		super(message, cause);
 		LOGGER.error(
-				"CarSharingTechnicalException: An error has happened during process.",
+				"CarSharingBusinessException: An error has happened during process.",
 				cause);
 	}
 
@@ -128,11 +128,11 @@ public class CarSharingTechnicalException extends Exception {
 	 *            <code>true</code> indica que el mensaje ha de ser escrito en
 	 *            la pila de llamadas.
 	 */
-	public CarSharingTechnicalException(String message, Throwable cause,
+	public CarSharingBusinessException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		LOGGER.error(
-				"CarSharingTechnicalException: An error has happened during process.",
+				"CarSharingBusinessException: An error has happened during process.",
 				cause);
 	}
 }

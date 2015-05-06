@@ -8,9 +8,9 @@ import org.bson.types.ObjectId;
 import co.edu.udea.carsharing.model.entities.Brand;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IBrandDAO;
-import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
-import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
-import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.persistence.exception.CarSharingPersistenceBusinessException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -61,7 +61,7 @@ public class BrandDAOImpl implements IBrandDAO {
 
 	@Override
 	public Brand insert(Brand brand) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (brand != null) {
 				BasicDBObject dbo = brand.entityToDBObject();
@@ -73,7 +73,7 @@ public class BrandDAOImpl implements IBrandDAO {
 				return (null == dbObject && wr.getN() == 0) ? null : Brand
 						.entityFromDBObject(dbObject);
 			} else {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método: %s. El parámetro brand de tipo %s no puede ser nulo.",
 								BrandDAOImpl.class.getSimpleName(), "insert()",

@@ -9,9 +9,9 @@ import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.User;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IUserDAO;
-import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
-import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
-import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.persistence.exception.CarSharingPersistenceBusinessException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -47,20 +47,22 @@ public class UserDAOImpl implements IUserDAO {
 
 	@Override
 	public User findByEmailAndPassword(String email, String password)
-			throws CarSharingDAOException, CarSharingBusinessException {
+			throws CarSharingDAOException,
+			CarSharingPersistenceBusinessException {
 		try {
 			if (null == email || ("").equals(email.trim()) || null == password
 					|| ("").equals(password.trim())) {
-				throw new CarSharingBusinessException(String.format(
+				throw new CarSharingPersistenceBusinessException(String.format(
 						"Clase %s: método %s. Los parámetros email o password (ambos de tipo %s) "
 								+ "no pueden ser ni nulos ni vacíos.",
 						UserDAOImpl.class.getSimpleName(), "findByEmail",
 						String.class.getSimpleName()));
 			} else {
-				BasicDBObject basicDBObject = new BasicDBObject();
-				basicDBObject.put(EMAIL, email);
-				basicDBObject.put(PASSWORD, password);
-				DBObject dbObject = this.collection.findOne(basicDBObject);
+				BasicDBObject projection = new BasicDBObject(PASSWORD, 0);
+				BasicDBObject query = new BasicDBObject();
+				query.put(EMAIL, email);
+				query.put(PASSWORD, password);
+				DBObject dbObject = this.collection.findOne(query, projection);
 
 				return (dbObject == null) ? null : User
 						.entityFromDBObject(dbObject);
@@ -76,19 +78,20 @@ public class UserDAOImpl implements IUserDAO {
 
 	@Override
 	public User insert(User user) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (user != null) {
 				BasicDBObject basicDBObject = user.entityToDBObject();
 				WriteResult wr = this.collection.insert(basicDBObject);
 
+				BasicDBObject projection = new BasicDBObject(PASSWORD, 0);
 				ObjectId id = (ObjectId) basicDBObject.get(ID);
-				DBObject dbObject = collection.findOne(id);
+				DBObject dbObject = collection.findOne(id, projection);
 
 				return (dbObject != null && wr.getN() == 0) ? User
 						.entityFromDBObject(dbObject) : null;
 			} else {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método %s. El objeto user de tipo %s no puede ser nulo.",
 								UserDAOImpl.class.getSimpleName(), "insert()",
@@ -104,18 +107,19 @@ public class UserDAOImpl implements IUserDAO {
 
 	@Override
 	public User findByEmail(String email) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (null == email || ("").equals(email.trim())) {
-				throw new CarSharingBusinessException(String.format(
+				throw new CarSharingPersistenceBusinessException(String.format(
 						"Clase %s: método %s. El parámetro email de tipo %s "
 								+ "no puede ser ni nulo ni vacío.",
 						UserDAOImpl.class.getSimpleName(), "findByEmail",
 						String.class.getSimpleName()));
 			} else {
-				BasicDBObject basicDBObject = new BasicDBObject();
-				basicDBObject.put(EMAIL, email);
-				DBObject dbObject = this.collection.findOne(basicDBObject);
+				BasicDBObject projection = new BasicDBObject(PASSWORD, 0);
+				BasicDBObject query = new BasicDBObject();
+				query.put(EMAIL, email);
+				DBObject dbObject = this.collection.findOne(query, projection);
 
 				return (dbObject == null) ? null : User
 						.entityFromDBObject(dbObject);
@@ -130,10 +134,10 @@ public class UserDAOImpl implements IUserDAO {
 
 	@Override
 	public User addCar(String email, Car car) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (null == email || email.trim().isEmpty() || null == car) {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase: %s, método %s. El parámetro email (%s) no puede ser ni nulo ni vacío, "
 										+ "y el parámemtro car (%s) no puede ser nulo.",
@@ -163,10 +167,10 @@ public class UserDAOImpl implements IUserDAO {
 	}
 
 	private User update(User user) throws CarSharingDAOException,
-			CarSharingBusinessException {
+			CarSharingPersistenceBusinessException {
 		try {
 			if (user == null) {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase: %s, método %s. El parámetro user, de tipo %s, no puede ser nulo.",
 								UserDAOImpl.class.getSimpleName(), "update()",
@@ -194,7 +198,7 @@ public class UserDAOImpl implements IUserDAO {
 	public List<Car> getCarsByUser(String email) throws CarSharingDAOException {
 		try {
 			if (null == email || email.trim().isEmpty()) {
-				throw new CarSharingBusinessException(
+				throw new CarSharingPersistenceBusinessException(
 						String.format(
 								"Clase %s: método %s. El parámetro email de tipo %s no puede ser ni nulo ni vacío.",
 								UserDAOImpl.class.getSimpleName(),

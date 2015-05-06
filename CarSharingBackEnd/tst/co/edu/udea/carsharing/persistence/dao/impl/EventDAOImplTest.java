@@ -14,9 +14,9 @@ import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.Site;
 import co.edu.udea.carsharing.model.entities.User;
-import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
-import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
-import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.persistence.exception.CarSharingPersistenceBusinessException;
+import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 public class EventDAOImplTest {
 
@@ -32,7 +32,7 @@ public class EventDAOImplTest {
 
 	// @Test
 	public void testInsert() throws CarSharingDAOException,
-			CarSharingBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
 		Brand brand = new Brand("CHEVROLET");
 		List<Car> cars = new ArrayList<Car>();
 		Car car = new Car("Blanco", "hil456", brand, "2014", 4);
@@ -63,7 +63,7 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testFind() throws CarSharingDAOException,
-			CarSharingBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
 		Event event = new Event();
 		String idEventFind = "55483cc45d1cf517247b5eef";
 
@@ -74,7 +74,7 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testInsertComment() throws CarSharingDAOException,
-			CarSharingBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
 		String id = "55483cc45d1cf517247b5eef";
 
 		User author = new User("Nombre Comentario 4", "Apellidos Comentario 4",
@@ -88,7 +88,7 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testJoin() throws CarSharingDAOException,
-			CarSharingBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
 		String idEventJoin = "55483cc45d1cf517247b5eef";
 		Event event;
 
