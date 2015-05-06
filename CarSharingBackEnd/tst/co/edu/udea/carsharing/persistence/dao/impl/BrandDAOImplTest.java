@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Brand;
-import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
-import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
+import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
 
 public class BrandDAOImplTest {
 

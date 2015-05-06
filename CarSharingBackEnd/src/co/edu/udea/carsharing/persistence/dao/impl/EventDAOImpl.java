@@ -7,15 +7,15 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
 import co.edu.udea.carsharing.model.entities.util.StateEnum;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IEventDAO;
-import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
-import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
+import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
+import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.util.exception.CarSharingTechnicalException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;

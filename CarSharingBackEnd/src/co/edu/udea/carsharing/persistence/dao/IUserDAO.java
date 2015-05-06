@@ -2,10 +2,10 @@ package co.edu.udea.carsharing.persistence.dao;
 
 import java.util.List;
 
-import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
 import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.User;
-import co.edu.udea.carsharing.persistence.dao.exception.CarSharingDAOException;
+import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
+import co.edu.udea.carsharing.util.exception.CarSharingDAOException;
 
 public interface IUserDAO {
 
