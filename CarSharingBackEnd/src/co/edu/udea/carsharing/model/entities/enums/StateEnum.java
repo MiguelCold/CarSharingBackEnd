@@ -1,4 +1,4 @@
-package co.edu.udea.carsharing.model.entities.util;
+package co.edu.udea.carsharing.model.entities.enums;
 
 public enum StateEnum {
 	ACTIVE(0, "Activo"), CANCELED(1, "Cancelado"), FINALIZED(3, "Finalizado"), EXPIRED(

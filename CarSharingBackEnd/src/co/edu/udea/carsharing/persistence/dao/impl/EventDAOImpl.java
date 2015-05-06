@@ -10,7 +10,7 @@ import org.bson.types.ObjectId;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
-import co.edu.udea.carsharing.model.entities.util.StateEnum;
+import co.edu.udea.carsharing.model.entities.enums.StateEnum;
 import co.edu.udea.carsharing.persistence.connection.MongoDBConnector;
 import co.edu.udea.carsharing.persistence.dao.IEventDAO;
 import co.edu.udea.carsharing.util.exception.CarSharingBusinessException;
