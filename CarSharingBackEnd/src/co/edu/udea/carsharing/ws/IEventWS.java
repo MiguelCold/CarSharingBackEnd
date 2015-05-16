@@ -2,6 +2,8 @@ package co.edu.udea.carsharing.ws;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
@@ -9,7 +11,7 @@ import co.edu.udea.carsharing.ws.exception.CarSharingWSException;
 
 public interface IEventWS {
 
-	public Event find(String eventId) throws CarSharingWSException;
+	public Response find(String eventId) throws CarSharingWSException;
 
 	public List<Event> findAll() throws CarSharingWSException;
 

@@ -26,6 +26,7 @@ public class Event implements Serializable {
 	private static String PARTNERS = "partners";
 	private static String VALUE = "value";
 	private static String STATE = "state";
+	private static String AMOUNTPEOPLE = "amountPeople";
 
 	private String id;
 	private Date createDate;
@@ -38,6 +39,7 @@ public class Event implements Serializable {
 	private List<User> partners;
 	private double value;
 	private String state;
+	private int amountPeople;
 
 	public Event() {
 		super();
@@ -52,6 +54,7 @@ public class Event implements Serializable {
 		this.source = source;
 		this.target = target;
 		this.value = value;
+		this.amountPeople = 0;
 	}
 
 	public static Event entityFromDBObject(DBObject dbObject) {
@@ -117,6 +120,12 @@ public class Event implements Serializable {
 			if (dbObject.containsField(STATE)) {
 				event.setState(((String) dbObject.get(STATE)).trim());
 			}
+
+			if (dbObject.containsField(AMOUNTPEOPLE)) {
+				event.setAmountPeople(Integer.parseInt(dbObject
+						.get(AMOUNTPEOPLE).toString().trim()));
+			}
+
 		}
 
 		return event;
@@ -179,6 +188,10 @@ public class Event implements Serializable {
 
 		if (null != this.getState()) {
 			basicDBObject.put(STATE, this.getState().trim());
+		}
+
+		if (0 <= this.getAmountPeople()) {
+			basicDBObject.put(AMOUNTPEOPLE, this.getAmountPeople());
 		}
 
 		return basicDBObject;
@@ -272,12 +285,21 @@ public class Event implements Serializable {
 		this.state = state;
 	}
 
+	public int getAmountPeople() {
+		return amountPeople;
+	}
+
+	public void setAmountPeople(int amountPeople) {
+		this.amountPeople = amountPeople;
+	}
+
 	@Override
 	public String toString() {
 		return "Event [id=" + id + ", createDate=" + createDate
 				+ ", eventDate=" + eventDate + ", author=" + author + ", car="
 				+ car + ", comments=" + comments + ", source=" + source
 				+ ", target=" + target + ", partners=" + partners + ", value="
-				+ value + ", state=" + state + "]";
+				+ value + ", state=" + state + ", amountPeople=" + amountPeople
+				+ "]";
 	}
 }

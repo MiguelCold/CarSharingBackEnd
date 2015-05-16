@@ -21,4 +21,21 @@ public class RESTFulWebServicesContract {
 			super();
 		}
 	}
+
+	public static final class EventWebServicesContract {
+
+		/*
+		 * Parameteres
+		 */
+		public static final String EVENT_ID_PARAM = "eventId";
+
+		/*
+		 * Paths
+		 */
+		public static final String ROOT_PATH = "/event";
+
+		private EventWebServicesContract() {
+			super();
+		}
+	}
 }

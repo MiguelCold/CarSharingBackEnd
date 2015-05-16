@@ -68,6 +68,7 @@ public class EventBusinessImpl implements IEventBusiness {
 						String.class.getSimpleName()));
 			} else {
 				if (event.getId() == null || event.getId().trim().isEmpty()) {
+					event.setAmountPeople(0);
 					return EventDAOImpl.getInstance().insert(event);
 				}
 				return event;
@@ -124,8 +125,14 @@ public class EventBusinessImpl implements IEventBusiness {
 				Event event;
 				event = this.find(eventId);
 				if (event != null) {
-					event.getPartners().add(newPartner);
-					event = this.update(event);
+					if (event.getCar().getCapacity() > event.getAmountPeople()) {
+
+						event.getPartners().add(newPartner);
+						event = this.update(event);
+						event.setAmountPeople(event.getAmountPeople() + 1);
+					} else {
+						return event;
+					}
 				}
 				return event;
 			}
