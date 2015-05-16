@@ -53,7 +53,7 @@ public class BrandDAOImpl implements IBrandDAO {
 		} catch (Exception e) {
 			throw new CarSharingDAOException(
 					String.format(
-							"Clase %s: método: %s. Error mientras se obtenían todos objetos %s.\n%s",
+							"Clase %s: mï¿½todo: %s. Error mientras se obtenï¿½an todos objetos %s.\n%s",
 							BrandDAOImpl.class.getSimpleName(), "findAll()",
 							Brand.class.getSimpleName(), e));
 		}
@@ -75,16 +75,40 @@ public class BrandDAOImpl implements IBrandDAO {
 			} else {
 				throw new CarSharingPersistenceBusinessException(
 						String.format(
-								"Clase %s: método: %s. El parámetro brand de tipo %s no puede ser nulo.",
+								"Clase %s: mï¿½todo: %s. El parï¿½metro brand de tipo %s no puede ser nulo.",
 								BrandDAOImpl.class.getSimpleName(), "insert()",
 								Brand.class.getSimpleName()));
 			}
 		} catch (Exception e) {
 			throw new CarSharingDAOException(
 					String.format(
-							"Clase %s: Se presentó un error inesperado mientras se ejecutaba el método %s.\n%s",
+							"Clase %s: Se presentï¿½ un error inesperado mientras se ejecutaba el mï¿½todo %s.\n%s",
 							BrandDAOImpl.class.getSimpleName(), "insert()", e));
 		}
 
+	}
+
+	@Override
+	public Brand find(String brand) throws CarSharingDAOException,
+			CarSharingPersistenceBusinessException {
+		try {
+			if (null == brand || brand.trim().isEmpty()) {
+				throw new CarSharingPersistenceBusinessException(String.format(
+						"Clase %s: mÃ©todo %s. El parÃ¡metro brand de "
+								+ "tipo %s no puede ser nulo ni vacÃ­o.",
+						BrandDAOImpl.class.getSimpleName(), "find()",
+						String.class.getSimpleName()));
+			} else {
+				Brand b = new Brand(brand);
+				DBObject dbo = this.collection.findOne(b.entityToDBObject());
+
+				return (null != dbo) ? Brand.entityFromDBObject(dbo) : null;
+			}
+		} catch (Exception e) {
+			throw new CarSharingDAOException(
+					String.format(
+							"Clase %s: mÃ©todo %s. Ha ocurrido un error inesperado.\n%s.",
+							BrandDAOImpl.class.getSimpleName(), "find()", e));
+		}
 	}
 }

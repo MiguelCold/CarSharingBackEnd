@@ -12,4 +12,7 @@ public interface IBrandDAO {
 
 	public Brand insert(Brand brand) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException;
+
+	public Brand find(String brand) throws CarSharingDAOException,
+			CarSharingPersistenceBusinessException;
 }

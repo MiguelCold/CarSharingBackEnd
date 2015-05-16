@@ -30,7 +30,7 @@ public class BrandBusinessImpl implements IBrandBusiness {
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(
 					String.format(
-							"Clase: %s, método %s. Se ha producido un error inesperado "
+							"Clase: %s, mÃ©todo %s. Se ha producido un error inesperado "
 									+ "al tratar de obtener todas las marcas disponibles.\n%s",
 							BrandBusinessImpl.class.getSimpleName(),
 							"findAll()", e));
@@ -44,19 +44,26 @@ public class BrandBusinessImpl implements IBrandBusiness {
 					|| brand.getBrand().trim().isEmpty()) {
 				throw new CarSharingBusinessException(
 						String.format(
-								"Clase: %s, método %s. El parámetro brand (%s) no "
+								"Clase: %s, mï¿½todo %s. El parï¿½metro brand (%s) no "
 										+ "puede ser nulo, o su atributo brand (%s) no puede "
-										+ "ser ni nulo ni vacío.",
+										+ "ser ni nulo ni vacï¿½o.",
 								BrandBusinessImpl.class.getSimpleName(),
 								"insert()", Brand.class.getSimpleName(),
 								String.class.getSimpleName()));
+			} else if (null != BrandDAOImpl.getInstance()
+					.find(brand.getBrand())) {
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase: %s, mï¿½todo %s. La marca con nombre %s ya existe.",
+								BrandBusinessImpl.class.getSimpleName(),
+								"insert()", Brand.class.getSimpleName(),
+								brand.getBrand()));
 			} else {
-
 				return BrandDAOImpl.getInstance().insert(brand);
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase: %s, método %s. Se ha producido un error inesperado "
+					"Clase: %s, mï¿½todo %s. Se ha producido un error inesperado "
 							+ "al tratar de insertar una marca.\n%s",
 					BrandBusinessImpl.class.getSimpleName(), "insert()", e));
 		}
