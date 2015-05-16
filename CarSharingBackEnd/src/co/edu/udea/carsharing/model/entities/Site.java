@@ -76,4 +76,9 @@ public class Site implements Serializable {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "Site [geographicalLocation=" + geographicalLocation
+				+ ", description=" + description + "]";
+	}
 }

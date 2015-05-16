@@ -93,4 +93,10 @@ public class Comment implements Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Comment [author=" + author + ", message=" + message
+				+ ", createDate=" + createDate + "]";
+	}
 }

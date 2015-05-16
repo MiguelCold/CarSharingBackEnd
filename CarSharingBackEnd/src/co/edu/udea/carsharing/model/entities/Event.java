@@ -272,4 +272,12 @@ public class Event implements Serializable {
 		this.state = state;
 	}
 
+	@Override
+	public String toString() {
+		return "Event [id=" + id + ", createDate=" + createDate
+				+ ", eventDate=" + eventDate + ", author=" + author + ", car="
+				+ car + ", comments=" + comments + ", source=" + source
+				+ ", target=" + target + ", partners=" + partners + ", value="
+				+ value + ", state=" + state + "]";
+	}
 }

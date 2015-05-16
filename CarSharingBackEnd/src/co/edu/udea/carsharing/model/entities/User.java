@@ -230,4 +230,12 @@ public class User implements Serializable {
 	public void setCars(List<Car> cars) {
 		this.cars = cars;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", lastName=" + lastName
+				+ ", email=" + email + ", password=" + password
+				+ ", facebookId=" + facebookId + ", birthDate=" + birthDate
+				+ ", cars=" + cars + "]";
+	}
 }

@@ -141,4 +141,11 @@ public class Car implements Serializable {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+
+	@Override
+	public String toString() {
+		return "Car [color=" + color + ", carriagePlate=" + carriagePlate
+				+ ", brand=" + brand + ", model=" + model + ", capacity="
+				+ capacity + "]";
+	}
 }
