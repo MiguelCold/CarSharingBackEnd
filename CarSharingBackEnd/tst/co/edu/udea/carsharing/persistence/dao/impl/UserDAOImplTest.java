@@ -17,9 +17,10 @@ import co.edu.udea.carsharing.technical.exception.CarSharingTechnicalException;
 
 public class UserDAOImplTest {
 
-//	@Test
+	@Test
 	public void testFindByEmailAndPassword() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
 		String email = "test1@gmail.com";
 		String password = "test1password";
 
@@ -29,9 +30,10 @@ public class UserDAOImplTest {
 		assertTrue(user != null && !("").equals(user.getId()));
 	}
 
-//	@Test
+	@Test
 	public void testInsert() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
 		User user1 = new User("Test 1 Name", "Test 1 Lastname",
 				"test1@gmail.com");
 		user1.setBirthDate(new Date());
@@ -62,7 +64,8 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testAddCar() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
 		String email1 = "test1@gmail.com";
 		String email2 = "test2@gmail.com";
 
@@ -92,7 +95,8 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testFindByEmail() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
 		String email = "test1@gmail.com";
 
 		User user = UserDAOImpl.getInstance().findByEmail(email);

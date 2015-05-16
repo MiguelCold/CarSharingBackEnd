@@ -32,11 +32,13 @@ public class UserBusinessImpl implements IUserBusiness {
 					|| password.trim().isEmpty()) {
 				throw new CarSharingBusinessException(
 						String.format(
-								"Clase %s: m�todo %s. Los par�metros email y password, "
-										+ "ambos tipo %s, no pueden ser ni nulos ni vac�os.",
+								"Clase %s: método %s. Los parámetros email y password, "
+										+ "ambos tipo %s, no pueden ser ni nulos ni vacíos."
+										+ "\n%s\n%s",
 								UserBusinessImpl.class.getSimpleName(),
 								"findByEmailAndPassword()",
-								String.class.getSimpleName()));
+								String.class.getSimpleName(), email.toString(),
+								password.toString()));
 			} else {
 
 				return UserDAOImpl.getInstance().findByEmailAndPassword(email,
@@ -44,7 +46,7 @@ public class UserBusinessImpl implements IUserBusiness {
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: m�todo %s. Se ha producido un error al tratar de buscar "
+					"Clase %s: método %s. Se ha producido un error al tratar de buscar "
 							+ "un usuario por email y password.\n%s",
 					UserBusinessImpl.class.getSimpleName(),
 					"findByEmailAndPassword()", e));
@@ -53,28 +55,133 @@ public class UserBusinessImpl implements IUserBusiness {
 
 	@Override
 	public User findByEmail(String email) throws CarSharingBusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			if (null == email || email.trim().isEmpty()) {
+				throw new CarSharingBusinessException(String.format(
+						"Clase %s: método %s. El parámetro email de tipo %s no "
+								+ "puede ser nulo ni vacío.\n%s",
+						UserBusinessImpl.class.getSimpleName(),
+						"findByEmail()", String.class.getSimpleName(),
+						email.toString()));
+			} else {
+
+				return UserDAOImpl.getInstance().findByEmail(email);
+			}
+		} catch (Exception e) {
+			throw new CarSharingBusinessException(String.format(
+					"Clase %s: método %s. Se ha producido un error inesperado "
+							+ "al tratar de buscar un usuario por email.\n%s",
+					UserBusinessImpl.class.getSimpleName(), "findByEmail()", e));
+		}
 	}
 
 	@Override
 	public User insert(User user) throws CarSharingBusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			if (!validateUser(user)) {
+				throw new CarSharingBusinessException(String.format(
+						"Clase %s: método %s. Alguno de los atributos obligatorios de "
+								+ "user (%s) es nulo o vacío. %s",
+						UserBusinessImpl.class.getSimpleName(), "insert()",
+						User.class.getSimpleName(), user.toString()));
+			} else if (null == this.findByEmail(user.getEmail())) {
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método %s. Ya existe un usuario con el mismo correo "
+										+ "con el que se quiere insertar el nuevo usuario.",
+								UserBusinessImpl.class.getSimpleName(),
+								"insert()"));
+			} else {
+				return UserDAOImpl.getInstance().insert(user);
+			}
+		} catch (Exception e) {
+			throw new CarSharingBusinessException(String.format(
+					"Clase %s: método %s. Se ha producido un error inesperado "
+							+ "al tratar de insertar un nuevo usuario.\n%s",
+					UserBusinessImpl.class.getSimpleName(), "insert()", e));
+		}
 	}
 
 	@Override
 	public User addCar(String email, Car car)
 			throws CarSharingBusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			if (null == email || email.trim().isEmpty() || !validateCar(car)) {
+				throw new CarSharingBusinessException(
+						String.format(
+								"Clase %s: método %s. El email (%s) no puede ser "
+										+ "nulo ni vacío, o alguno de los atributos "
+										+ "obligatorios de car (%s) es vacío  o nulo.\n%s\n%s",
+								UserBusinessImpl.class.getSimpleName(),
+								"addCar()", String.class.getSimpleName(),
+								Car.class.getSimpleName(), email.toString(),
+								car.toString()));
+			} else {
+
+				return UserDAOImpl.getInstance().addCar(email, car);
+			}
+		} catch (Exception e) {
+			throw new CarSharingBusinessException(
+					String.format(
+							"Clase %s: método %s. Se ha producido un error inesperado "
+									+ "al tratar de agregar un carro al listado de un usuario."
+									+ "\n%s",
+							UserBusinessImpl.class.getSimpleName(), "addCar()",
+							e));
+		}
 	}
 
 	@Override
 	public List<Car> getCarsByUser(String email)
 			throws CarSharingBusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			if (null == email || email.trim().isEmpty()) {
+				throw new CarSharingBusinessException(String.format(
+						"Clase %s: método %s. El parámetro email (%s) no puede "
+								+ "ser nulo ni vacío.\n%s",
+						UserBusinessImpl.class.getSimpleName(),
+						"getCarsByUser()", String.class.getSimpleName(),
+						email.toString()));
+			} else {
+
+				return UserDAOImpl.getInstance().getCarsByUser(email);
+			}
+		} catch (Exception e) {
+			throw new CarSharingBusinessException(
+					String.format(
+							"Clase %s: método %s. Se ha producido un error inesperado "
+									+ "al tratar de obtener el listado de carros de un usuario.\n%s",
+							UserBusinessImpl.class.getSimpleName(),
+							"getCarsByUser()", e));
+		}
 	}
 
+	private boolean validateUser(User user) {
+		if (null != user && null != user.getBirthDate()
+				&& null != user.getEmail() && !user.getEmail().trim().isEmpty()
+				&& null != user.getLastName()
+				&& !user.getLastName().trim().isEmpty()
+				&& null != user.getName() && !user.getName().trim().isEmpty()
+				&& null != user.getPassword()
+				&& !user.getPassword().trim().isEmpty()) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean validateCar(Car car) {
+		if (null != car && null != car.getBrand()
+				&& !car.getBrand().getBrand().trim().isEmpty()
+				&& !car.getCarriagePlate().trim().isEmpty()
+				&& null != car.getColor() && !car.getColor().trim().isEmpty()
+				&& null != car.getModel() && !car.getModel().trim().isEmpty()
+				&& car.getCapacity() > 0) {
+
+			return true;
+		}
+
+		return false;
+	}
 }
