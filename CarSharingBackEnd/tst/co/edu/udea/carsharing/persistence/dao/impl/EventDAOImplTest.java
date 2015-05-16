@@ -30,18 +30,19 @@ public class EventDAOImplTest {
 		assertTrue(events.size() >= 0);
 	}
 
-	// @Test
+	@Test
 	public void testInsert() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
 		Brand brand = new Brand("CHEVROLET");
 		List<Car> cars = new ArrayList<Car>();
 		Car car = new Car("Blanco", "hil456", brand, "2014", 4);
 		cars.add(car);
 
-		User author = new User("Migue ¡ngel", "Ossa Ruiz",
+		User author = new User("Migue √Ångel", "Ossa Ruiz",
 				"miguelcold8@gmail.com");
-		Site source = new Site("location", "U de A");
-		Site target = new Site("location", "U de A");
+		Site source = new Site("latitud1", "longitud1", "U de A");
+		Site target = new Site("latitud2", "longitud2", "U de A");
 
 		List<Comment> comments = new ArrayList<Comment>();
 		comments.add(new Comment(author, "Comentario 1", new Date()));
@@ -63,9 +64,10 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testFind() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
 		Event event = new Event();
-		String idEventFind = "55483cc45d1cf517247b5eef";
+		String idEventFind = "55575f6aba3ed37bfe2d6431";
 
 		event = EventDAOImpl.getInstance().find(idEventFind);
 
@@ -74,8 +76,9 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testInsertComment() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
-		String id = "55483cc45d1cf517247b5eef";
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
+		String id = "55575f6aba3ed37bfe2d6431";
 
 		User author = new User("Nombre Comentario 4", "Apellidos Comentario 4",
 				"test4@gmail.com");
@@ -88,8 +91,9 @@ public class EventDAOImplTest {
 
 	@Test
 	public void testJoin() throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException, CarSharingTechnicalException {
-		String idEventJoin = "55483cc45d1cf517247b5eef";
+			CarSharingPersistenceBusinessException,
+			CarSharingTechnicalException {
+		String idEventJoin = "55575f6aba3ed37bfe2d6431";
 		Event event;
 
 		User partner = new User("New Partner", "New Partner",
