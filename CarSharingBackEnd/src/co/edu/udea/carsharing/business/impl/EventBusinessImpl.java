@@ -5,7 +5,6 @@ import java.util.List;
 
 import co.edu.udea.carsharing.business.IEventBusiness;
 import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
-import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
@@ -71,9 +70,6 @@ public class EventBusinessImpl implements IEventBusiness {
 			} else {
 				if (event.getId() == null || event.getId().trim().isEmpty()) {
 					event.setAmountPeople(0);
-					Car car = event.getCar();
-					car.setCarriagePlate(car.getCarriagePlate().toUpperCase());
-					event.setCar(car);
 					return EventDAOImpl.getInstance().insert(event);
 				}
 				return event;

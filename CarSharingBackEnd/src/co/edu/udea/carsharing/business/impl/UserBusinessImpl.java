@@ -1,5 +1,6 @@
 package co.edu.udea.carsharing.business.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.udea.carsharing.business.IUserBusiness;
@@ -32,8 +33,8 @@ public class UserBusinessImpl implements IUserBusiness {
 					|| password.trim().isEmpty()) {
 				throw new CarSharingBusinessException(
 						String.format(
-								"Clase %s: m√©todo %s. Los par√°metros email y password, "
-										+ "ambos tipo %s, no pueden ser ni nulos ni vac√≠os."
+								"Clase %s: mÈtodo %s. Los par·metros email y password, "
+										+ "ambos tipo %s, no pueden ser ni nulos ni vacÌos."
 										+ "\n%s\n%s",
 								UserBusinessImpl.class.getSimpleName(),
 								"findByEmailAndPassword()",
@@ -46,7 +47,7 @@ public class UserBusinessImpl implements IUserBusiness {
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: m√©todo %s. Se ha producido un error al tratar de buscar "
+					"Clase %s: mÈtodo %s. Se ha producido un error al tratar de buscar "
 							+ "un usuario por email y password.\n%s",
 					UserBusinessImpl.class.getSimpleName(),
 					"findByEmailAndPassword()", e));
@@ -58,8 +59,8 @@ public class UserBusinessImpl implements IUserBusiness {
 		try {
 			if (null == email || email.trim().isEmpty()) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: m√©todo %s. El par√°metro email de tipo %s no "
-								+ "puede ser nulo ni vac√≠o.\n%s",
+						"Clase %s: mÈtodo %s. El par·metro email de tipo %s no "
+								+ "puede ser nulo ni vacÌo.\n%s",
 						UserBusinessImpl.class.getSimpleName(),
 						"findByEmail()", String.class.getSimpleName(),
 						email.toString()));
@@ -69,7 +70,7 @@ public class UserBusinessImpl implements IUserBusiness {
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: m√©todo %s. Se ha producido un error inesperado "
+					"Clase %s: mÈtodo %s. Se ha producido un error inesperado "
 							+ "al tratar de buscar un usuario por email.\n%s",
 					UserBusinessImpl.class.getSimpleName(), "findByEmail()", e));
 		}
@@ -80,23 +81,20 @@ public class UserBusinessImpl implements IUserBusiness {
 		try {
 			if (!validateUser(user)) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: m√©todo %s. Alguno de los atributos obligatorios de "
-								+ "user (%s) es nulo o vac√≠o. %s",
+						"Clase %s: mÈtodo %s. Alguno de los atributos obligatorios de "
+								+ "usert (%s) es nulo o vacÌo. %s",
 						UserBusinessImpl.class.getSimpleName(), "insert()",
 						User.class.getSimpleName(), user.toString()));
 			} else if (null == this.findByEmail(user.getEmail())) {
-				throw new CarSharingBusinessException(
-						String.format(
-								"Clase %s: m√©todo %s. Ya existe un usuario con el mismo correo "
-										+ "con el que se quiere insertar el nuevo usuario.",
-								UserBusinessImpl.class.getSimpleName(),
-								"insert()"));
-			} else {
+
 				return UserDAOImpl.getInstance().insert(user);
+			} else {
+
+				return null;
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: m√©todo %s. Se ha producido un error inesperado "
+					"Clase %s: mÈtodo %s. Se ha producido un error inesperado "
 							+ "al tratar de insertar un nuevo usuario.\n%s",
 					UserBusinessImpl.class.getSimpleName(), "insert()", e));
 		}
@@ -109,21 +107,31 @@ public class UserBusinessImpl implements IUserBusiness {
 			if (null == email || email.trim().isEmpty() || !validateCar(car)) {
 				throw new CarSharingBusinessException(
 						String.format(
-								"Clase %s: m√©todo %s. El email (%s) no puede ser "
-										+ "nulo ni vac√≠o, o alguno de los atributos "
-										+ "obligatorios de car (%s) es vac√≠o  o nulo.\n%s\n%s",
+								"Clase %s: mÈtodo %s. El email (%s) no puede ser "
+										+ "nulo ni vacÌo, o alguno de los atributos "
+										+ "obligatorios de car (%s) es vacÌo  o nulo.\n%s\n%s",
 								UserBusinessImpl.class.getSimpleName(),
 								"addCar()", String.class.getSimpleName(),
 								Car.class.getSimpleName(), email.toString(),
 								car.toString()));
 			} else {
+				User user = this.findByEmail(email);
+				if (user != null) {
+					if (user.getCars() == null) {
+						user.setCars(new ArrayList<Car>());
+					}
 
-				return UserDAOImpl.getInstance().addCar(email, car);
+					car.setCarriagePlate(car.getCarriagePlate().toUpperCase());
+					user.getCars().add(car);
+					return UserDAOImpl.getInstance().update(user);
+				}
+
+				return null;
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(
 					String.format(
-							"Clase %s: m√©todo %s. Se ha producido un error inesperado "
+							"Clase %s: mÈtodo %s. Se ha producido un error inesperado "
 									+ "al tratar de agregar un carro al listado de un usuario."
 									+ "\n%s",
 							UserBusinessImpl.class.getSimpleName(), "addCar()",
@@ -137,8 +145,8 @@ public class UserBusinessImpl implements IUserBusiness {
 		try {
 			if (null == email || email.trim().isEmpty()) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: m√©todo %s. El par√°metro email (%s) no puede "
-								+ "ser nulo ni vac√≠o.\n%s",
+						"Clase %s: mÈtodo %s. El par·metro email (%s) no puede "
+								+ "ser nulo ni vacÌo.\n%s",
 						UserBusinessImpl.class.getSimpleName(),
 						"getCarsByUser()", String.class.getSimpleName(),
 						email.toString()));
@@ -149,7 +157,7 @@ public class UserBusinessImpl implements IUserBusiness {
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(
 					String.format(
-							"Clase %s: m√©todo %s. Se ha producido un error inesperado "
+							"Clase %s: mÈtodo %s. Se ha producido un error inesperado "
 									+ "al tratar de obtener el listado de carros de un usuario.\n%s",
 							UserBusinessImpl.class.getSimpleName(),
 							"getCarsByUser()", e));

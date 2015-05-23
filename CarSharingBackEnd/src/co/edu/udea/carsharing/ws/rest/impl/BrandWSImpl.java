@@ -39,7 +39,6 @@ public class BrandWSImpl implements IBrandWS {
 
 			b = BrandBusinessImpl.getInstance().insert(brand);
 		} catch (CarSharingBusinessException e) {
-
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.build();
 		}
@@ -57,7 +56,6 @@ public class BrandWSImpl implements IBrandWS {
 		try {
 			brands = BrandBusinessImpl.getInstance().findAll();
 		} catch (CarSharingBusinessException | CarSharingTechnicalException e) {
-
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.build();
 		}
