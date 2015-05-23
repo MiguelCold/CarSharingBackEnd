@@ -133,40 +133,7 @@ public class UserDAOImpl implements IUserDAO {
 	}
 
 	@Override
-	public User addCar(String email, Car car) throws CarSharingDAOException,
-			CarSharingPersistenceBusinessException {
-		try {
-			if (null == email || email.trim().isEmpty() || null == car) {
-				throw new CarSharingPersistenceBusinessException(
-						String.format(
-								"Clase: %s, método %s. El parámetro email (%s) no puede ser ni nulo ni vacío, "
-										+ "y el parámemtro car (%s) no puede ser nulo.",
-								UserDAOImpl.class.getSimpleName(), "addCar()",
-								String.class.getSimpleName(),
-								Car.class.getSimpleName()));
-			} else {
-				User user = this.findByEmail(email);
-
-				if (user.getCars() == null) {
-					user.setCars(new ArrayList<Car>());
-				}
-
-				List<Car> cars = user.getCars();
-				cars.add(car);
-				user.setCars(cars);
-
-				return this.update(user);
-			}
-		} catch (MongoException | NullPointerException e) {
-			throw new CarSharingDAOException(
-					String.format(
-							"Clase %s: método %s. Se presentó un error inesperado "
-									+ "al tratar de agregar un carro a un usuario.\n%s",
-							UserDAOImpl.class.getSimpleName(), "addCar()", e));
-		}
-	}
-
-	private User update(User user) throws CarSharingDAOException,
+	public User update(User user) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
 			if (user == null) {

@@ -63,11 +63,13 @@ public class UserDAOImplTest {
 	}
 
 	@Test
-	public void testAddCar() throws CarSharingDAOException,
+	public void testUpdate() throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException,
 			CarSharingTechnicalException {
-		String email1 = "test1@gmail.com";
-		String email2 = "test2@gmail.com";
+		User user = new User("Test 1 Name", "Test 1 Lastname",
+				"test1@gmail.com");
+		user.setBirthDate(new Date());
+		user.setId("5546d9c45d1cf51fecd5dbce");
 
 		Car car = new Car();
 		car.setBrand(new Brand("CHEVROLET"));
@@ -75,12 +77,15 @@ public class UserDAOImplTest {
 		car.setCarriagePlate("DEF456");
 		car.setColor("Rojo");
 		car.setModel("Modelo del Carro");
+		if (user.getCars() == null) {
+			user.setCars(new ArrayList<Car>());
+		}
 
-		User user1 = UserDAOImpl.getInstance().addCar(email1, car);
-		User user2 = UserDAOImpl.getInstance().addCar(email2, car);
+		user.getCars().add(car);
 
-		assertTrue(user1 != null && !user1.getId().isEmpty() && user2 != null
-				&& !user2.getId().isEmpty());
+		User user1 = UserDAOImpl.getInstance().update(user);
+
+		assertTrue(user1 != null && !user1.getId().isEmpty());
 	}
 
 	@Test
