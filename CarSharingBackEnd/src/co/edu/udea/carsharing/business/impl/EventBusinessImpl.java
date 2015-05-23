@@ -1,9 +1,11 @@
 package co.edu.udea.carsharing.business.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import co.edu.udea.carsharing.business.IEventBusiness;
 import co.edu.udea.carsharing.business.exception.CarSharingBusinessException;
+import co.edu.udea.carsharing.model.entities.Car;
 import co.edu.udea.carsharing.model.entities.Comment;
 import co.edu.udea.carsharing.model.entities.Event;
 import co.edu.udea.carsharing.model.entities.User;
@@ -29,8 +31,8 @@ public class EventBusinessImpl implements IEventBusiness {
 		try {
 			if (null == eventId || eventId.trim().isEmpty()) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: mï¿½todo %s. El parï¿½metro eventId,"
-								+ " no puede ser ni nulo ni vacï¿½o.",
+						"Clase %s: método %s. El parámetro eventId,"
+								+ " no puede ser ni nulo ni vacío.",
 						EventBusinessImpl.class.getSimpleName(), "find()",
 						String.class.getSimpleName()));
 			} else {
@@ -39,7 +41,7 @@ public class EventBusinessImpl implements IEventBusiness {
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: mï¿½todo %s. Se ha producido un error al tratar de buscar "
+					"Clase %s: método %s. Se ha producido un error al tratar de buscar "
 							+ "un evento por el id.\n%s",
 					EventBusinessImpl.class.getSimpleName(), "find()", e));
 		}
@@ -51,7 +53,7 @@ public class EventBusinessImpl implements IEventBusiness {
 			return EventDAOImpl.getInstance().findAll();
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: mï¿½todo %s. Se ha producido un error al tratar de buscar "
+					"Clase %s: método %s. Se ha producido un error al tratar de buscar "
 							+ "una lista de eventos.\n%s",
 					EventBusinessImpl.class.getSimpleName(), "findAll()", e));
 		}
@@ -62,48 +64,51 @@ public class EventBusinessImpl implements IEventBusiness {
 		try {
 			if (null == event) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: mï¿½todo %s. El parï¿½metro event,"
+						"Clase %s: método %s. El parámetro event,"
 								+ " no puede ser nulo.",
 						EventBusinessImpl.class.getSimpleName(), "insert()",
 						String.class.getSimpleName()));
 			} else {
 				if (event.getId() == null || event.getId().trim().isEmpty()) {
 					event.setAmountPeople(0);
+					Car car = event.getCar();
+					car.setCarriagePlate(car.getCarriagePlate().toUpperCase());
+					event.setCar(car);
 					return EventDAOImpl.getInstance().insert(event);
 				}
 				return event;
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: mï¿½todo %s. Se ha producido un error al tratar de insertar "
+					"Clase %s: método %s. Se ha producido un error al tratar de insertar "
 							+ "un evento.\n%s",
 					EventBusinessImpl.class.getSimpleName(), "insert()", e));
 		}
 	}
 
 	@Override
-	public Event insertComment(Comment newComment, String eventId)
+	public Event insertComment(Comment newComment, Event event)
 			throws CarSharingBusinessException {
 		try {
-			if (null == newComment || eventId == null
-					|| eventId.trim().isEmpty()) {
+			if (null == newComment || event == null || event.getId() == null
+					|| event.getId().trim().isEmpty()) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: mï¿½todo %s. Los parï¿½metros newComment y eventId,"
-								+ " no pueden ser nulo ni vacï¿½os.",
+						"Clase %s: método %s. El parámetro newComment y el eventId,"
+								+ " no pueden ser nulos ni vacíos.",
 						EventBusinessImpl.class.getSimpleName(),
 						"insertComment()", String.class.getSimpleName()));
 			} else {
-				Event event;
-				event = this.find(eventId);
-				if (event != null) {
-					event.getComments().add(newComment);
-					event = this.update(event);
+				if (event.getComments() == null) {
+					event.setComments(new ArrayList<Comment>());
 				}
+				event.getComments().add(newComment);
+				event = this.update(event);
+
 				return event;
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: mï¿½todo %s. Se ha producido un error al tratar de insertar "
+					"Clase %s: método %s. Se ha producido un error al tratar de insertar "
 							+ "un comentario en el evento.\n%s",
 					EventBusinessImpl.class.getSimpleName(), "insertComment()",
 					e));
@@ -111,35 +116,36 @@ public class EventBusinessImpl implements IEventBusiness {
 	}
 
 	@Override
-	public Event join(User newPartner, String eventId)
+	public Event join(User newPartner, Event event)
 			throws CarSharingBusinessException {
 		try {
-			if (null == newPartner || eventId == null
-					|| eventId.trim().isEmpty()) {
+			if (null == newPartner || event == null || event.getId() == null
+					|| event.getId().trim().isEmpty()) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: mï¿½todo %s. Los parï¿½metros newPartner y eventId,"
-								+ " no pueden ser nulo ni vacï¿½os.",
+						"Clase %s: método %s. El parámetro newPartner y el eventId,"
+								+ " no pueden ser nulos ni vacíos.",
 						EventBusinessImpl.class.getSimpleName(),
 						"insertComment()", String.class.getSimpleName()));
 			} else {
-				Event event;
-				event = this.find(eventId);
-				if (event != null) {
-					if (event.getCar().getCapacity() > event.getAmountPeople()) {
+				if (event.getCar().getCapacity() > event.getAmountPeople()) {
+					if (event.getPartners() == null) {
 
-						event.getPartners().add(newPartner);
-						event = this.update(event);
-						event.setAmountPeople(event.getAmountPeople() + 1);
-					} else {
-						return event;
+						event.setPartners(new ArrayList<User>());
 					}
+					event.getPartners().add(newPartner);
+					event.setAmountPeople(event.getAmountPeople() + 1);
+					event = this.update(event);
+				} else {
+
+					return null;
 				}
+
 				return event;
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: mï¿½todo %s. Se ha producido un error al tratar de insertar "
-							+ "un compaï¿½ero en el evento.\n%s",
+					"Clase %s: método %s. Se ha producido un error al tratar de insertar "
+							+ "un compañero en el evento.\n%s",
 					EventBusinessImpl.class.getSimpleName(), "insertPartner()",
 					e));
 		}
@@ -150,7 +156,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		try {
 			if (null == event) {
 				throw new CarSharingBusinessException(String.format(
-						"Clase %s: mï¿½todo %s. El parï¿½metro event,"
+						"Clase %s: método %s. El parámetro event,"
 								+ " no puede ser nulo.",
 						EventBusinessImpl.class.getSimpleName(), "update()",
 						String.class.getSimpleName()));
@@ -159,7 +165,7 @@ public class EventBusinessImpl implements IEventBusiness {
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase %s: mï¿½todo %s. Se ha producido un error al tratar de insertar "
+					"Clase %s: método %s. Se ha producido un error al tratar de insertar "
 							+ "un evento.\n%s",
 					EventBusinessImpl.class.getSimpleName(), "insert()", e));
 		}

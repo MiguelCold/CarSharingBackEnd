@@ -14,9 +14,9 @@ public interface IEventBusiness {
 
 	public Event insert(Event event)throws CarSharingBusinessException;
 
-	public Event insertComment(Comment newComment, String eventId)throws CarSharingBusinessException;
+	public Event insertComment(Comment newComment, Event event)throws CarSharingBusinessException;
 
-	public Event join(User newPartner, String eventId)throws CarSharingBusinessException;
+	public Event join(User newPartner, Event event)throws CarSharingBusinessException;
 
 	public Event update(Event event) throws CarSharingBusinessException;
 }

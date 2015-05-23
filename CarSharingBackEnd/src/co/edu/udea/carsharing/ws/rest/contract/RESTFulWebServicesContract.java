@@ -32,8 +32,10 @@ public class RESTFulWebServicesContract {
 		/*
 		 * Paths
 		 */
-		public static final String FIND_ALL_PATH = "/all";
 		public static final String ROOT_PATH = "/event";
+		public static final String FIND_ALL_PATH = "/all";
+		public static final String INSERT_COMMENT = "/comment";
+		public static final String JOIN_PARTNER = "/partner";
 
 		private EventWebServicesContract() {
 			super();
