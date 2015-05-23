@@ -15,11 +15,13 @@ public interface IEventWS {
 
 	public List<Event> findAll() throws CarSharingWSException;
 
-	public Event insert(Event event) throws CarSharingWSException;
+	public Response  insert(Event event) throws CarSharingWSException;
 
-	public Event insertComment(Comment newComment, String eventId)
+	public Response insertComment(Comment newComment, String eventId)
 			throws CarSharingWSException;
 
-	public Event join(User newPartner, String eventId)
+	public Response join(User newPartner, String eventId)
 			throws CarSharingWSException;
+	
+	public boolean validateJoin(Event event);
 }

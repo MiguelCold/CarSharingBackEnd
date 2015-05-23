@@ -1,5 +1,6 @@
 package co.edu.udea.carsharing.ws.rest.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -23,6 +24,10 @@ import co.edu.udea.carsharing.ws.rest.contract.RESTFulWebServicesContract;
 public class EventWSImpl implements IEventWS {
 
 	private IEventBusiness eventBusiness;
+
+	public EventWSImpl() {
+		this.eventBusiness = EventBusinessImpl.getInstance();
+	}
 
 	@GET()
 	@Override()
@@ -49,30 +54,132 @@ public class EventWSImpl implements IEventWS {
 				Response.Status.NO_CONTENT).build());
 	}
 
-	@Override
+	@GET()
+	@Override()
+	@Path(value = RESTFulWebServicesContract.EventWebServicesContract.FIND_ALL_PATH)
+	@Produces(value = { MediaType.APPLICATION_JSON })
 	public List<Event> findAll() throws CarSharingWSException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Event> eventsList = null;
+
+		try {
+			eventsList = this.eventBusiness.findAll();
+
+			if (eventsList == null) {
+				eventsList = new ArrayList<Event>();
+			}
+		} catch (CarSharingBusinessException e) {
+
+			return (null);
+		}
+
+		return ((eventsList.isEmpty()) ? null : eventsList);
 	}
 
 	@Override
-	public Event insert(Event event) throws CarSharingWSException {
-		// TODO Auto-generated method stub
-		return null;
+	public Response insert(Event event) throws CarSharingWSException {
+		if (event == null) {
+
+			return (Response.status(Response.Status.BAD_REQUEST).build());
+
+		} else {
+			Event returnedEvent = null;
+			try {
+
+				returnedEvent = this.eventBusiness.insert(event);
+
+			} catch (CarSharingBusinessException e) {
+
+				return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+						.build());
+			}
+
+			return ((returnedEvent != null) ? Response.ok(returnedEvent)
+					.build() : Response.status(Response.Status.NO_CONTENT)
+					.build());
+		}
 	}
 
 	@Override
-	public Event insertComment(Comment newComment, String eventId)
+	public Response insertComment(Comment newComment, String eventId)
 			throws CarSharingWSException {
-		// TODO Auto-generated method stub
-		return null;
+		Event returnedEvent;
+		if (newComment == null || eventId.equals("") || eventId.isEmpty()) {
+
+			return (Response.status(Response.Status.BAD_REQUEST).build());
+
+		} else {
+			try {
+				returnedEvent = this.eventBusiness.find(eventId);
+				if (returnedEvent != null) {
+
+					returnedEvent = this.eventBusiness.insertComment(
+							newComment, eventId);
+
+				} else {
+
+					return (Response.status(Response.Status.BAD_REQUEST)
+							.build());
+
+				}
+
+			} catch (CarSharingBusinessException e) {
+
+				return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+						.build());
+			}
+
+			return ((returnedEvent != null) ? Response.ok(returnedEvent)
+					.build() : Response.status(Response.Status.NO_CONTENT)
+					.build());
+		}
 	}
 
 	@Override
-	public Event join(User newPartner, String eventId)
-			throws CarSharingWSException {
-		// TODO Auto-generated method stub
-		return null;
+	public Response join(User newPartner, String eventId) {
+		Event returnedEvent;
+		if (newPartner == null || eventId.equals("") || eventId.isEmpty()) {
+
+			return (Response.status(Response.Status.BAD_REQUEST).build());
+
+		} else {
+			try {
+				returnedEvent = this.eventBusiness.find(eventId);
+				if (returnedEvent != null && validateJoin(returnedEvent)) {
+
+					returnedEvent = this.eventBusiness
+							.join(newPartner, eventId);
+
+				} else {
+
+					return (Response.status(Response.Status.BAD_REQUEST)
+							.build());
+
+				}
+
+			} catch (CarSharingBusinessException e) {
+
+				return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+						.build());
+			}
+
+			return ((returnedEvent != null) ? Response.ok(returnedEvent)
+					.build() : Response.status(Response.Status.NO_CONTENT)
+					.build());
+		}
+	}
+
+	public boolean validateJoin(Event event) {
+		if (event != null) {
+			int amountPeople = event.getAmountPeople();
+			int capacity = event.getCar().getCapacity();
+			if (capacity <= amountPeople) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 
 }
