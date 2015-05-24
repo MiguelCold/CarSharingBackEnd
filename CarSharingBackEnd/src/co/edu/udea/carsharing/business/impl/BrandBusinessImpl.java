@@ -23,38 +23,38 @@ public class BrandBusinessImpl implements IBrandBusiness {
 		return instance;
 	}
 
-	@Override
+	@Override()
 	public List<Brand> findAll() throws CarSharingBusinessException {
 		try {
 			return BrandDAOImpl.getInstance().findAll();
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(
 					String.format(
-							"Clase: %s, m√©todo %s. Se ha producido un error inesperado "
+							"Clase: %s, mÈtodo %s. Se ha producido un error inesperado "
 									+ "al tratar de obtener todas las marcas disponibles.\n%s",
 							BrandBusinessImpl.class.getSimpleName(),
 							"findAll()", e));
 		}
 	}
 
-	@Override
+	@Override()
 	public Brand insert(Brand brand) throws CarSharingBusinessException {
 		try {
 			if (null == brand || null == brand.getBrand()
 					|| brand.getBrand().trim().isEmpty()) {
 				throw new CarSharingBusinessException(
 						String.format(
-								"Clase: %s, m√©todo %s. El par√°metro brand (%s) no "
+								"Clase: %s, mÈtodo %s. El par·metro brand (%s) no "
 										+ "puede ser nulo, o su atributo brand (%s) no puede "
-										+ "ser ni nulo ni vac√≠o.\n%s",
+										+ "ser ni nulo ni vacÌo.\n%s",
 								BrandBusinessImpl.class.getSimpleName(),
 								"insert()", Brand.class.getSimpleName(),
 								String.class.getSimpleName(), brand.toString()));
 			} else if (null != BrandDAOImpl.getInstance()
-					.find(brand.getBrand())) {
+					.find(brand.getBrand().toUpperCase())) {
 				throw new CarSharingBusinessException(
 						String.format(
-								"Clase: %s, m√©todo %s. La marca con nombre %s ya existe.",
+								"Clase: %s, mÈtodo %s. La marca con nombre %s ya existe.",
 								BrandBusinessImpl.class.getSimpleName(),
 								"insert()", Brand.class.getSimpleName(),
 								brand.getBrand()));
@@ -63,7 +63,7 @@ public class BrandBusinessImpl implements IBrandBusiness {
 			}
 		} catch (Exception e) {
 			throw new CarSharingBusinessException(String.format(
-					"Clase: %s, m√©todo %s. Se ha producido un error inesperado "
+					"Clase: %s, mÈtodo %s. Se ha producido un error inesperado "
 							+ "al tratar de insertar una marca.\n%s",
 					BrandBusinessImpl.class.getSimpleName(), "insert()", e));
 		}

@@ -25,7 +25,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		return instance;
 	}
 
-	@Override
+	@Override()
 	public Event find(String eventId) throws CarSharingBusinessException {
 		try {
 			if (null == eventId || eventId.trim().isEmpty()) {
@@ -46,7 +46,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public List<Event> findAll() throws CarSharingBusinessException {
 		try {
 			return EventDAOImpl.getInstance().findAll();
@@ -58,7 +58,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event insert(Event event) throws CarSharingBusinessException {
 		try {
 			if (null == event) {
@@ -82,7 +82,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event insertComment(Comment newComment, Event event)
 			throws CarSharingBusinessException {
 		try {
@@ -111,7 +111,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event join(User newPartner, Event event)
 			throws CarSharingBusinessException {
 		try {
@@ -124,6 +124,8 @@ public class EventBusinessImpl implements IEventBusiness {
 						"insertComment()", String.class.getSimpleName()));
 			} else {
 				if (event.getCar().getCapacity() > event.getAmountPeople()) {
+					// TODO Falta verificar que la persona que se vaya a unir no
+					// se haya unido previamente
 					if (event.getPartners() == null) {
 
 						event.setPartners(new ArrayList<User>());
@@ -147,7 +149,7 @@ public class EventBusinessImpl implements IEventBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event update(Event event) throws CarSharingBusinessException {
 		try {
 			if (null == event) {

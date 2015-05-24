@@ -45,7 +45,7 @@ public class UserDAOImpl implements IUserDAO {
 		return instance;
 	}
 
-	@Override
+	@Override()
 	public User findByEmailAndPassword(String email, String password)
 			throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
@@ -76,7 +76,7 @@ public class UserDAOImpl implements IUserDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public User insert(User user) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
@@ -105,7 +105,7 @@ public class UserDAOImpl implements IUserDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public User findByEmail(String email) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
@@ -132,7 +132,7 @@ public class UserDAOImpl implements IUserDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public User update(User user) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
@@ -161,7 +161,7 @@ public class UserDAOImpl implements IUserDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public List<Car> getCarsByUser(String email) throws CarSharingDAOException {
 		try {
 			if (null == email || email.trim().isEmpty()) {

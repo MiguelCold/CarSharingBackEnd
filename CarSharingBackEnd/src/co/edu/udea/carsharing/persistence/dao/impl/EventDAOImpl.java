@@ -55,7 +55,7 @@ public class EventDAOImpl implements IEventDAO {
 		return instance;
 	}
 
-	@Override
+	@Override()
 	public Event find(String eventId) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
@@ -80,7 +80,7 @@ public class EventDAOImpl implements IEventDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public List<Event> findAll() throws CarSharingDAOException {
 		try {
 			List<Event> eventList = new ArrayList<Event>();
@@ -104,7 +104,7 @@ public class EventDAOImpl implements IEventDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event insert(Event event) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
@@ -133,9 +133,10 @@ public class EventDAOImpl implements IEventDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event insertComment(Comment newComment, String eventId)
-			throws CarSharingDAOException, CarSharingPersistenceBusinessException {
+			throws CarSharingDAOException,
+			CarSharingPersistenceBusinessException {
 		try {
 			if (eventId != null && !("").equals(eventId.trim())
 					&& newComment != null) {
@@ -169,9 +170,10 @@ public class EventDAOImpl implements IEventDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event join(User newPartner, String eventId)
-			throws CarSharingDAOException, CarSharingPersistenceBusinessException {
+			throws CarSharingDAOException,
+			CarSharingPersistenceBusinessException {
 		try {
 			if (eventId != null && !("").equals(eventId.trim())
 					&& newPartner != null) {
@@ -203,7 +205,7 @@ public class EventDAOImpl implements IEventDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public Event update(Event event) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {

@@ -25,7 +25,7 @@ public class UserBusinessImpl implements IUserBusiness {
 		return instance;
 	}
 
-	@Override
+	@Override()
 	public User findByEmailAndPassword(String email, String password)
 			throws CarSharingBusinessException {
 		try {
@@ -54,7 +54,7 @@ public class UserBusinessImpl implements IUserBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public User findByEmail(String email) throws CarSharingBusinessException {
 		try {
 			if (null == email || email.trim().isEmpty()) {
@@ -76,7 +76,7 @@ public class UserBusinessImpl implements IUserBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public User insert(User user) throws CarSharingBusinessException {
 		try {
 			if (!validateUser(user)) {
@@ -100,7 +100,7 @@ public class UserBusinessImpl implements IUserBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public User addCar(String email, Car car)
 			throws CarSharingBusinessException {
 		try {
@@ -139,7 +139,7 @@ public class UserBusinessImpl implements IUserBusiness {
 		}
 	}
 
-	@Override
+	@Override()
 	public List<Car> getCarsByUser(String email)
 			throws CarSharingBusinessException {
 		try {

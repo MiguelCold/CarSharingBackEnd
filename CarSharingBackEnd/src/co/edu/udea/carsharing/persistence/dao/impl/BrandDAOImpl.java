@@ -39,7 +39,7 @@ public class BrandDAOImpl implements IBrandDAO {
 		return instance;
 	}
 
-	@Override
+	@Override()
 	public List<Brand> findAll() throws CarSharingDAOException {
 		try {
 			List<Brand> brands = new ArrayList<Brand>();
@@ -59,7 +59,7 @@ public class BrandDAOImpl implements IBrandDAO {
 		}
 	}
 
-	@Override
+	@Override()
 	public Brand insert(Brand brand) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
@@ -88,7 +88,7 @@ public class BrandDAOImpl implements IBrandDAO {
 
 	}
 
-	@Override
+	@Override()
 	public Brand find(String brand) throws CarSharingDAOException,
 			CarSharingPersistenceBusinessException {
 		try {
